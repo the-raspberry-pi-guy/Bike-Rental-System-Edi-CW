@@ -25,6 +25,10 @@ public class DateRange {
         return ChronoUnit.YEARS.between(this.getStart(), this.getEnd());
     }
 
+    public long toDays() {
+        return ChronoUnit.DAYS.between(this.getStart(), this.getEnd());
+    }
+
     public Boolean overlaps(DateRange other) {
         // TODO: implement date range intersection checking
         assert false;
