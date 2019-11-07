@@ -12,7 +12,13 @@ TESTSRCS = $(wildcard $(TESTDIR)/*.java)
 TESTCLSS := $(patsubst $(TESTDIR)/%.java,$(TESTBINDIR)/%.class,$(TESTSRCS))
 JAVA = java
 
-default: src tests
+default: srcs tests
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
+$(TESTBINDIR):
+	mkdir -p $(TESTBINDIR)
 
 $(BINDIR)/%.class: $(SRCDIR)/%.java
 	$(JAVAC) $(JFLAGS) -sourcepath src -d bin $<
@@ -20,9 +26,9 @@ $(BINDIR)/%.class: $(SRCDIR)/%.java
 $(TESTBINDIR)/%.class: $(TESTDIR)/%.java
 	$(JAVAC) -cp $(CLASSPATH) $(JFLAGS) -sourcepath tests -d testbin $<
 
-srcs: $(CLSS)
+srcs: $(BINDIR) $(CLSS)
 
-tests: srcs $(TESTCLSS)
+tests: srcs $(TESTBINDIR) $(TESTCLSS)
 
 test: tests
 	$(JAVA) -cp $(CLASSPATH) -ea org.junit.platform.console.ConsoleLauncher -p uk.ac.ed.bikerental
@@ -31,7 +37,7 @@ testlog: tests
 	-$(JAVA) -cp $(CLASSPATH) -ea org.junit.platform.console.ConsoleLauncher --disable-ansi-colors -p uk.ac.ed.bikerental > output.log 2>&1
 
 submission: src tests testlog
-	zip -r submission.zip src tests output.log
+	zip -r submission.zip src tests output.log report.pdf
 
 clean:
 	$(RM) bin/uk/ac/ed/bikerental/*.class testbin/uk/ac/ed/bikerental/*.class
