@@ -1,3 +1,5 @@
 *.class
 .vscode/*
 /testbin/
+/bin/
+.gitignore

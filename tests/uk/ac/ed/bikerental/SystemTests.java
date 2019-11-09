@@ -16,17 +16,17 @@ import java.util.TreeSet;
 
 public class SystemTests {
     // You can add attributes here
-
+	BikeProvider prov1 = new BikeProvider();
+    BikeProvider prov2 = new BikeProvider();
+    BikeProvider prov3 = new BikeProvider();
+    QuoteController controller = new QuoteController();
+	
     @BeforeEach
     void setUp() throws Exception {
         // Setup mock delivery service before each tests
         DeliveryServiceFactory.setupMockDeliveryService();
         
         // Put your test setup here
-        BikeProvider prov1 = new BikeProvider();
-        BikeProvider prov2 = new BikeProvider();
-        BikeProvider prov3 = new BikeProvider();
-        QuoteController controller = new QuoteController();
     }
     
     // TODO: Write system tests covering the three main use cases
@@ -38,10 +38,11 @@ public class SystemTests {
     }
     
     // Test the happy scenario - for a correct input, nearby correct quotes should be shown.
-    // Query should return quotes from the two nearby stores (prov1 and prov2) but not prov3.
+    // Query should return quotes from the two nearby stores (prov1 and prov2) but not prov3.	
     @Test
     void returnQuotesForCorrectInput() {
-    	Collection<Quote> quotes = controller.getQuotes();
-    	assetEquals(quotes.length, 2);
+    	controller.getQuotes();
+    	Collection<Quote> quotes = controller.quoteList;	
+    	assertTrue(quotes.size() == 2);
     }
 }
