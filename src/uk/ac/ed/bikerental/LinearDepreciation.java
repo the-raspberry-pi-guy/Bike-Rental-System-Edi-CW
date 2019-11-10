@@ -22,9 +22,7 @@ public class LinearDepreciation implements ValuationPolicy {
 		
 		// Formula for the linear depreciation rate
         BigDecimal totalPercentageRate = new BigDecimal(yearSinceBikePurchase).multiply(depreciationDecimalRate);
-        System.out.println(totalPercentageRate);
         BigDecimal lostValue = totalPercentageRate.multiply(bike.bikeType.getReplacementValue());
-		System.out.println(lostValue);
         
 		calculatedValue = bike.bikeType.getReplacementValue().subtract(lostValue); 
         return calculatedValue;
