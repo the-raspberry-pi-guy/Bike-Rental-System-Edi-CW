@@ -15,4 +15,10 @@ public class QuoteController {
 		
 	}
 
+	public Booking bookQuote(Quote chosenQuote) {
+		return null;
+		// TODO Auto-generated method stub
+		
+	}
+
 }

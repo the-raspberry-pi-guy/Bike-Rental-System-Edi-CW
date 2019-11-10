@@ -16,10 +16,6 @@ import java.util.TreeSet;
 
 public class SystemTests {
     // You can add attributes here
-	BikeProvider prov1 = new BikeProvider();
-    BikeProvider prov2 = new BikeProvider();
-    BikeProvider prov3 = new BikeProvider();
-    QuoteController controller = new QuoteController();
 	
     @BeforeEach
     void setUp() throws Exception {
@@ -37,12 +33,4 @@ public class SystemTests {
         assertEquals("The moon", "cheese"); // Should fail
     }
     
-    // Test the happy scenario - for a correct input, nearby correct quotes should be shown.
-    // Query should return quotes from the two nearby stores (prov1 and prov2) but not prov3.	
-    @Test
-    void returnQuotesForCorrectInput() {
-    	controller.getQuotes();
-    	Collection<Quote> quotes = controller.quoteList;	
-    	assertTrue(quotes.size() == 2);
-    }
 }
