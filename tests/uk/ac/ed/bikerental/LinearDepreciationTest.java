@@ -34,7 +34,8 @@ class LinearDepreciationTest {
     @DisplayName("First test")
     void firstTest() {
         System.out.println("Testing Linear Depreciation with supplied values");
-        Bike bike = new Bike("BMX", new BigDecimal("900"), LocalDate.of(2005, 8, 19));
+        BikeType type = new BikeType("BMX", new BigDecimal("900"));
+        Bike bike = new Bike(type, LocalDate.of(2005, 8, 19));
         LinearDepreciation linearDep = new LinearDepreciation(new BigDecimal("10"));
         BigDecimal result = linearDep.calculateValue(bike, LocalDate.of(2008, 4, 6));
         assertEquals(new BigDecimal("630").stripTrailingZeros(), result.stripTrailingZeros());

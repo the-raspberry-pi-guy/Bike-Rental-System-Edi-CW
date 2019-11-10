@@ -34,7 +34,8 @@ class DoubleDecliningBalanceDepreciationTest {
     @DisplayName("First test")
     void firstTest() {
         System.out.println("Testing Double Declining Balance Depreciation with supplied values");
-        Bike bike = new Bike("BMX", new BigDecimal("900"), LocalDate.of(2005, 8, 19));
+        BikeType type = new BikeType("BMX", new BigDecimal("900"));
+        Bike bike = new Bike(type, LocalDate.of(2005, 8, 19));
         DoubleDecliningBalanceDepreciation ddbd = new DoubleDecliningBalanceDepreciation(new BigDecimal("10"));
         BigDecimal result = ddbd.calculateValue(bike, LocalDate.of(2008, 4, 6));
         assertEquals(new BigDecimal("460.8").stripTrailingZeros(), result.stripTrailingZeros());
@@ -44,7 +45,8 @@ class DoubleDecliningBalanceDepreciationTest {
     @DisplayName("Second test")
     void secondTest() {
         System.out.println("Testing Double Declining Balance Depreciation with extra values");
-        Bike bike = new Bike("Street", new BigDecimal("1500"), LocalDate.of(2003, 8, 19));
+        BikeType type = new BikeType("Street", new BigDecimal("1500"));
+        Bike bike = new Bike(type, LocalDate.of(2003, 8, 19));
         DoubleDecliningBalanceDepreciation ddbd = new DoubleDecliningBalanceDepreciation(new BigDecimal("30"));
         BigDecimal result = ddbd.calculateValue(bike, LocalDate.of(2008, 4, 6));
         assertEquals(new BigDecimal("15.36").stripTrailingZeros(), result.stripTrailingZeros());

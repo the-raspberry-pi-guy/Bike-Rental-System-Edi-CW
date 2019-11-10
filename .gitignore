@@ -1,4 +1,10 @@
 *.class
 .vscode/*
+<<<<<<< HEAD
 /bin/
 /testbin/
+=======
+/testbin/
+/bin/
+.gitignore
+>>>>>>> harry

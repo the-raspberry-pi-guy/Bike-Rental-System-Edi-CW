@@ -16,16 +16,16 @@ public class LinearDepreciation implements ValuationPolicy {
 		BigDecimal depreciationDecimalRate;
 		
 		// Calculate the years since the bike was purchased
-		yearSinceBikePurchase = date.getYear() - bike.dateOfPurchase.getYear();
+		yearSinceBikePurchase = date.getYear() - bike.getDateOfPurchase().getYear();
 		// Calculate the depreciation rate as a decimal value
 		depreciationDecimalRate = depreciationRate.divide(new BigDecimal("100")); 
 		
 		
 		// Formula for the linear depreciation rate
         BigDecimal totalPercentageRate = new BigDecimal(yearSinceBikePurchase).multiply(depreciationDecimalRate);
-        BigDecimal lostValue = totalPercentageRate.multiply(bike.bikeType.getReplacementValue());
+        BigDecimal lostValue = totalPercentageRate.multiply(bike.getType().getReplacementValue());
         
-		calculatedValue = bike.bikeType.getReplacementValue().subtract(lostValue); 
+		calculatedValue = bike.getType().getReplacementValue().subtract(lostValue); 
         return calculatedValue;
 	}
 }

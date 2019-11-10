@@ -3,19 +3,20 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 
 public class BikeType {
-    private BigDecimal replacementValue;
-    private String type;
-    
-    public BikeType(String typeModel, BigDecimal replacementVal) {
-        replacementValue = replacementVal;
-        type = typeModel;
-    }
-    
+	
+	private String typeModel;
+	private BigDecimal replacementValue;
+
+	public BikeType(String name, BigDecimal replacementValue) {
+		this.typeModel = name;
+		this.replacementValue = replacementValue;
+	}
+	
     public BigDecimal getReplacementValue() {
         return replacementValue;
     }
     
     public String getBikeType() {
-        return type;
+        return typeModel;
     }
 }

@@ -17,7 +17,7 @@ public class DoubleDecliningBalanceDepreciation implements ValuationPolicy {
 		BigDecimal doubleDepreciationRate;
         
         // Calculate the years since the bike was purchased
-        yearSinceBikePurchase = date.getYear() - bike.dateOfPurchase.getYear();
+        yearSinceBikePurchase = date.getYear() - bike.getDateOfPurchase().getYear();
         // Calculate the depreciation rate as a decimal value
         depreciationDecimalRate = depreciationRate.divide(new BigDecimal("100"));
         doubleDepreciationRate = depreciationDecimalRate.multiply(new BigDecimal("2"));
@@ -25,7 +25,7 @@ public class DoubleDecliningBalanceDepreciation implements ValuationPolicy {
         // Formula for the double declining balance depreciation rate: VAL * 0.RATE^YEAR
         BigDecimal doubleDepreciationRateOut1 = new BigDecimal("1").subtract(doubleDepreciationRate);
         BigDecimal doubleDepreciationRateOut1ToYearPower = doubleDepreciationRateOut1.pow(yearSinceBikePurchase);
-        calculatedValue = bike.bikeType.getReplacementValue().multiply(doubleDepreciationRateOut1ToYearPower);
+        calculatedValue = bike.getType().getReplacementValue().multiply(doubleDepreciationRateOut1ToYearPower);
         return calculatedValue;
 	}
 }
