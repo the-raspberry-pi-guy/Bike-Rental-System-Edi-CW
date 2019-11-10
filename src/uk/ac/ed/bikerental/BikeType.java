@@ -1,12 +1,21 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class BikeType {
+    private BigDecimal replacementValue;
+    private String type;
+    
+    public BikeType(String typeModel, BigDecimal replacementVal) {
+        replacementValue = replacementVal;
+        type = typeModel;
+    }
+    
     public BigDecimal getReplacementValue() {
-        // TODO: Implement Bike.getReplacementValue
-        assert false;
-        return null;
+        return replacementValue;
+    }
+    
+    public String getBikeType() {
+        return type;
     }
 }
