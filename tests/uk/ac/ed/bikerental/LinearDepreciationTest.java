@@ -22,7 +22,6 @@ class LinearDepreciationTest {
         System.out.println("Starting tests on Linear Depreciation");
     }
 
- 
     @AfterAll
     static void afterAll() {
         System.out.println("Completed Linear Depreciation test");

@@ -8,13 +8,13 @@ public class LinearDepreciation implements ValuationPolicy {
     private BigDecimal depreciationRate;
     
     public LinearDepreciation(BigDecimal rate) {
-        depreciationRate = rate;
+        this.depreciationRate = rate;
     }
     
     public BigDecimal calculateValue(Bike bike, LocalDate date) {
 		
 		// Calculate the years since the bike was purchased
-		long yearSinceBikePurchase = ChronoUnit.YEARS.between(bike.getDateOfPurchase(),date);
+		long yearSinceBikePurchase = ChronoUnit.YEARS.between(bike.getDateOfPurchase(), date);
 		
 		// Calculate the depreciation rate as a decimal value
 		BigDecimal depreciationDecimalRate = depreciationRate.divide(new BigDecimal("100")); 
