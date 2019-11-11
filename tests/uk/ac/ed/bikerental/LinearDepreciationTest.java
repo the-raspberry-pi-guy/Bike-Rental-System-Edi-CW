@@ -46,4 +46,14 @@ class LinearDepreciationTest {
         BigDecimal result = linearDep.calculateValue(bikeStreet, LocalDate.of(2019, 7, 6));
         assertEquals(new BigDecimal("600").stripTrailingZeros(), result.stripTrailingZeros());    
     }
+    
+    @Test
+    @DisplayName("Depreciate Past 0 Test")
+    void depreciateToZeroTest() {
+        // 50% depreciation, so any bike of age 2 years or older should have depreciated to 0
+        System.out.println("Testing Linear Depreciation going past 0");
+        LinearDepreciation linearDep = new LinearDepreciation(new BigDecimal("50"));
+        BigDecimal result = linearDep.calculateValue(bikeStreet, LocalDate.of(2016, 7, 6));
+        assertEquals(new BigDecimal("0").stripTrailingZeros(), result.stripTrailingZeros());    
+    }
 }
