@@ -2,6 +2,7 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class LinearDepreciation implements ValuationPolicy {
     private BigDecimal depreciationRate;
@@ -11,21 +12,18 @@ public class LinearDepreciation implements ValuationPolicy {
     }
     
     public BigDecimal calculateValue(Bike bike, LocalDate date) {
-		int yearSinceBikePurchase;
-		BigDecimal calculatedValue;
-		BigDecimal depreciationDecimalRate;
 		
 		// Calculate the years since the bike was purchased
-		yearSinceBikePurchase = date.getYear() - bike.getDateOfPurchase().getYear();
+		long yearSinceBikePurchase = ChronoUnit.YEARS.between(bike.getDateOfPurchase(),date);
+		System.out.println(yearSinceBikePurchase);
 		// Calculate the depreciation rate as a decimal value
-		depreciationDecimalRate = depreciationRate.divide(new BigDecimal("100")); 
-		
+		BigDecimal depreciationDecimalRate = depreciationRate.divide(new BigDecimal("100")); 
 		
 		// Formula for the linear depreciation rate
         BigDecimal totalPercentageRate = new BigDecimal(yearSinceBikePurchase).multiply(depreciationDecimalRate);
         BigDecimal lostValue = totalPercentageRate.multiply(bike.getType().getReplacementValue());
         
-		calculatedValue = bike.getType().getReplacementValue().subtract(lostValue); 
+		BigDecimal calculatedValue = bike.getType().getReplacementValue().subtract(lostValue); 
         return calculatedValue;
 	}
 }

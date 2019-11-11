@@ -9,41 +9,41 @@ import org.junit.jupiter.api.*;
 
 @DisplayName("Linear Depreciation Test")
 class LinearDepreciationTest {
-  
+    // Create new BMX bike valued at £900 and from 2005
+    BikeType typeBMX = new BikeType("BMX", new BigDecimal("900"));
+    Bike bikeBMX = new Bike(typeBMX, LocalDate.of(2005, 8, 19));
+    
+    // Create new Street bike valued at £2000 and from 2012
+    BikeType typeStreet = new BikeType("Street", new BigDecimal("2000"));
+    Bike bikeStreet = new Bike(typeStreet, LocalDate.of(2012, 5, 2));
+    
     @BeforeAll
     static void beforeAll() {
-        System.out.println("Before all test methods");
+        System.out.println("Starting tests on Linear Depreciation");
     }
- 
-    @BeforeEach
-    void beforeEach() {
-        System.out.println("Before each test method");
-    }
- 
-    @AfterEach
-    void afterEach() {
-        System.out.println("After each test method");
-    }
+
  
     @AfterAll
     static void afterAll() {
-        System.out.println("After all test methods");
+        System.out.println("Completed Linear Depreciation test");
     }
  
     @Test
-    @DisplayName("First test")
-    void firstTest() {
+    @DisplayName("Provided Test")
+    void providedTest() {
+        // 3 year old bike with starting value of £900
         System.out.println("Testing Linear Depreciation with supplied values");
-        BikeType type = new BikeType("BMX", new BigDecimal("900"));
-        Bike bike = new Bike(type, LocalDate.of(2005, 8, 19));
         LinearDepreciation linearDep = new LinearDepreciation(new BigDecimal("10"));
-        BigDecimal result = linearDep.calculateValue(bike, LocalDate.of(2008, 4, 6));
+        BigDecimal result = linearDep.calculateValue(bikeBMX, LocalDate.of(2008, 9, 6));
         assertEquals(new BigDecimal("630").stripTrailingZeros(), result.stripTrailingZeros());
     }
  
     @Test
-    @DisplayName("Second test")
+    @DisplayName("Custom Test")
     void secondTest() {
-        System.out.println("Second test method");
+        System.out.println("Testing Linear Depreciation with custom values");
+        LinearDepreciation linearDep = new LinearDepreciation(new BigDecimal("10"));
+        BigDecimal result = linearDep.calculateValue(bikeStreet, LocalDate.of(2019, 7, 6));
+        assertEquals(new BigDecimal("600").stripTrailingZeros(), result.stripTrailingZeros());    
     }
 }
