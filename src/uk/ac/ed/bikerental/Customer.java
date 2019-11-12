@@ -13,4 +13,21 @@ public class Customer {
 		this.customerDetails = customerDetails;
 		this.deleteFlag = deleteFlag;
 	}
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public ContactDetails getCustomerDetails() {
+        return customerDetails;
+    }
+
+    public boolean isDeleteFlag() {
+        return deleteFlag;
+    }
+	
 }
