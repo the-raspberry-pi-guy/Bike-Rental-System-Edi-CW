@@ -23,7 +23,9 @@ class BikeTest {
         this.bike1 = new Bike(typeBMX, LocalDate.of(2010, 5, 1));
         this.bike2 = new Bike(typeBMX, LocalDate.of(2014, 8, 6));
         this.bike3 = new Bike(typeStreet, LocalDate.of(2008, 12, 25));
-    
+        
+        bike1.makeUnavailable(new DateRange(LocalDate.of(2019, 8, 10), LocalDate.of(2019, 12, 13)));
+        bike1.makeUnavailable(new DateRange(LocalDate.of(2019, 12, 16), LocalDate.of(2019, 12, 18)));
         bike3.makeUnavailable(new DateRange(LocalDate.of(2019, 5, 1), LocalDate.of(2019, 5, 3)));
     }
     
@@ -37,5 +39,16 @@ class BikeTest {
     void unavailableBikeTest() {
         assertFalse(bike3.isAvailable(new DateRange(LocalDate.of(2019, 5, 1), LocalDate.of(2019, 5, 3))));
     }
+    
+    @Test
+    @DisplayName("Available Bike Test on Empty Range")
+    void availableEmptyBikeTest() {
+        assertTrue(bike2.isAvailable(new DateRange(LocalDate.of(2017, 5, 1), LocalDate.of(2017, 6, 3))));
+    }
 
+    @Test
+    @DisplayName("Available Bike Test on Bike with Some Dates")
+    void availableBikeTest() {
+        assertTrue(bike1.isAvailable(new DateRange(LocalDate.of(2019, 12, 14), LocalDate.of(2019, 12, 15))));
+    }
 }
