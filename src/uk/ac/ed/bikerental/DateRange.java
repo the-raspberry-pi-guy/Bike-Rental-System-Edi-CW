@@ -6,7 +6,8 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 public class DateRange {
-    private LocalDate start, end;
+    private LocalDate start; 
+    private LocalDate end;
     
     public DateRange(LocalDate start, LocalDate end) {
         this.start = start;
@@ -29,8 +30,8 @@ public class DateRange {
         return ChronoUnit.DAYS.between(this.getStart(), this.getEnd());
     }
 
-    public Boolean overlaps(DateRange other) {
-    	return (this.start.isBefore(other.end)) && ( this.end.isAfter(other.start)); 
+    public Boolean overlaps(DateRange otherDate) {
+    	return (this.start.isBefore(otherDate.end)) && ( this.end.isAfter(otherDate.start)); 
     }
 
     @Override

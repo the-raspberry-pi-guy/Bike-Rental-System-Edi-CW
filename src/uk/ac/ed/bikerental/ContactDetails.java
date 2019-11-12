@@ -9,4 +9,12 @@ public class ContactDetails {
 		this.location = location;
 		this.phoneNo = phoneNo;
 	}
+	
+	public Location getLocation() {
+	    return location;
+	}
+	
+	public int getPhoneNo() {
+	    return phoneNo;   
+	}
 }
