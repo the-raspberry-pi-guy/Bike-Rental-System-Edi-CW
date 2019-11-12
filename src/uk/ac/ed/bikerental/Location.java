@@ -11,7 +11,7 @@ public class Location {
     }
     
     public boolean isNearTo(Location other) {
-        if(this.postcode.substring(0, 1) == other.postcode.substring(0, 1)) {
+        if(this.postcode.substring(0, 1).equals(other.postcode.substring(0, 1))) {
         	return true;
         } else {
         	return false;

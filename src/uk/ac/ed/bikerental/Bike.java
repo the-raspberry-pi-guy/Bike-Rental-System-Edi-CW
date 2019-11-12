@@ -1,14 +1,16 @@
 package uk.ac.ed.bikerental;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Bike {
 	
-	private Collection<DateRange> datesBooked;
+	private ArrayList<DateRange> datesBooked;
 	private BikeType type;
 
 	public Bike(BikeType type) {
 		this.type = type;
+		datesBooked = new ArrayList<DateRange>();
 	}
 	
     public BikeType getType() {
