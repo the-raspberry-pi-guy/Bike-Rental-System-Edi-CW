@@ -11,7 +11,7 @@ public class Quote {
 	private ArrayList<Bike> bikeList;
 	private BigDecimal totalPrice;
 
-	public Quote(DateRange range, BikeProvider provider, Collection<Bike> bikeList) {
+	public Quote(DateRange range, BikeProvider provider, ArrayList<Bike> bikeList) {
 		this.bookingRange = range;
 		this.provider = provider;
 		this.bikeList = bikeList;

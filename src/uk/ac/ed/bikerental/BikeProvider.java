@@ -3,6 +3,8 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class BikeProvider {
@@ -12,7 +14,7 @@ public class BikeProvider {
 	private Map<String, String> openHours; // Map from day to hour range
 	private ArrayList<BikeProvider> partners;
 	private Map<BikeType, BigDecimal> typePrice; // Map from Bike Type to BigDecimal price
-	private ArrayList<Bike> bikes;
+	private ArrayList<Bike> providerBikes;
 	
 	public BikeProvider(String name, ContactDetails providerDetails, Map<String, String> openHours) {
 		this.storeName = name;
@@ -20,11 +22,11 @@ public class BikeProvider {
 		this.openHours = openHours;
 		
 		partners = new ArrayList<BikeProvider>();
-	    bike = new ArrayList<Bike>();
+	    providerBikes = new ArrayList<Bike>();
 	}
 	
-	public void addBiketoStore(Bike bike, BigDecimal dailyRentalPrice) {
-	    
+	public void addBiketoStore(Bike bike) {
+	    providerBikes.add(bike);
 	}
 	
 	public void addBikeTypetoStore(BikeType bikeType) {
@@ -50,5 +52,19 @@ public class BikeProvider {
 	
 	public void notifyOriginalProvider(int orderNo) {
 	    //TODO
+	}
+	
+	public ArrayList<Bike> getAvailableForType(BikeType type, DateRange dates) {
+		ArrayList<Bike> bikes = new ArrayList<Bike>();
+		for(Bike bike: providerBikes) {
+			if(bike.getType() == type && bike.isAvailable(dates)) {
+				bikes.add(bike);
+			}
+		}
+		return bikes;
+	}
+	
+	public ContactDetails getContactDetails() {
+		return this.providerDetails;
 	}
 }

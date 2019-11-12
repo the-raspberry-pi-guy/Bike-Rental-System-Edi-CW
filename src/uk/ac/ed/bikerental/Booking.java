@@ -6,16 +6,18 @@ import java.util.UUID;
 public class Booking {
 
 	private UUID orderNo;
-	private boolean requireDelivery;
-	private boolean partnerReturn;
+	private DateRange hireDates;
+	private boolean requiresDelivery;
+	private BigDecimal totalPrice;
 	private BigDecimal depositAmount;
-	private Quote bookedQuote;
-	
-	public Booking(Quote quote, boolean requireDelivery, boolean partnerReturn) {
-	    this.bookedQuote = quote;
-	    this.requireDelivery = requireDelivery;
-	    this.partnerReturn = partnerReturn;
-	    
-	    orderNo = UUID.randomUUID();
+	private boolean depositPaid;
+
+	public Booking(DateRange hireDates, boolean requiresDelivery, BigDecimal totalPrice, BigDecimal depositAmount) {
+		this.hireDates = hireDates;
+		this.requiresDelivery = requiresDelivery;
+		this.totalPrice = totalPrice;
+		this.depositAmount = depositAmount;
+		this.orderNo = UUID.randomUUID();
+		this.depositPaid = false;
 	}
 }

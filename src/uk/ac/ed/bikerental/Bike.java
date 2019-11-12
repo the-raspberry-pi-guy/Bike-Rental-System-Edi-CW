@@ -12,7 +12,6 @@ public class Bike {
 	public Bike(BikeType type, LocalDate date) {
 		this.type = type;
 		this.dateOfPurchase = date;
-		
 		datesBooked = new ArrayList<DateRange>();
 	}
 	
