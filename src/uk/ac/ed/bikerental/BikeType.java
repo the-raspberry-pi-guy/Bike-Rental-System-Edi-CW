@@ -19,4 +19,5 @@ public class BikeType {
     public String getBikeType() {
         return typeModel;
     }
+    
 }

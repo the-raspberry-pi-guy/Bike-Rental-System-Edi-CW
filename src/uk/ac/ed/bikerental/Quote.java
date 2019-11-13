@@ -16,4 +16,20 @@ public class Quote {
 		this.provider = provider;
 		this.bikeList = bikeList;
 	}
+
+    public DateRange getBookingRange() {
+        return bookingRange;
+    }
+
+    public BikeProvider getProvider() {
+        return provider;
+    }
+
+    public ArrayList<Bike> getBikeList() {
+        return bikeList;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
 }

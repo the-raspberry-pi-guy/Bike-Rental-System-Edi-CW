@@ -21,6 +21,10 @@ public class DateRange {
     public LocalDate getEnd() {
         return this.end;
     }
+    
+    public String toString() {
+        return String.format("%s %s", start, end);
+    }
 
     public long toYears() {
         return ChronoUnit.YEARS.between(this.getStart(), this.getEnd());

@@ -6,14 +6,14 @@ import java.util.Map;
 
 public class QuoteController {
 	
-	public ArrayList<Quote> quoteList;
+	private ArrayList<Quote> quoteList;
 
 	public QuoteController() {
 		quoteList = new ArrayList<Quote>();
 	}
 
-	public Collection<Quote> getQuotes(DateRange dates, ArrayList<BikeProvider> providers, Map<BikeType, Integer> bikes, Location location) {
-		Collection<BikeProvider> nearbyProviders = getNearbyProviders(providers, location);
+	public Collection<Quote> getQuotes(DateRange dates, ArrayList<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location) {
+		Collection<BikeProvider> nearbyProviders = getNearbyProviders(allBikeProviders, location);
 		for(BikeProvider provider:nearbyProviders) {
 			Quote result = getQuoteForProvider(dates, provider, bikes);
 			if(result != null) {
@@ -23,9 +23,10 @@ public class QuoteController {
 		return quoteList;
 	}
 
-	private ArrayList<BikeProvider> getNearbyProviders(ArrayList<BikeProvider> providers, Location location) {
+	// Takes in a large list of all providers in Scotland, and returns only providers that are near location
+	private ArrayList<BikeProvider> getNearbyProviders(ArrayList<BikeProvider> allBikeProviders, Location location) {
 		ArrayList<BikeProvider> nearbyProviders = new ArrayList<BikeProvider>();
-		for(BikeProvider provider:providers) {
+		for(BikeProvider provider:allBikeProviders) {
 			if(provider.getContactDetails().getLocation().isNearTo(location)) {
 				nearbyProviders.add(provider);
 			}
@@ -35,12 +36,12 @@ public class QuoteController {
 
 	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> bikes) {
 		ArrayList<Bike> bikeList = new ArrayList<Bike>(); // Initialise bikeList
-		for(Map.Entry<BikeType,Integer> entry:bikes.entrySet()) { // For each bike in the desired order
-			ArrayList<Bike> available = provider.getAvailableForType(entry.getKey(), dates); // Check how many of that type are available from the provider
-			if(available.size() >= entry.getValue()) { // If there are enough available bikes, get them, else return null
+		for(Map.Entry<BikeType,Integer> chosenType:bikes.entrySet()) { // For each bike in the desired order
+			ArrayList<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
+			if(available.size() >= chosenType.getValue()) { // If there are enough available bikes, get them, else return null
 				int i = 0; 
 				for(Bike bike:available) { // Get the first n bikes from the provider (where n is the desired number)
-					if(i < entry.getValue()) {
+					if(i < chosenType.getValue()) {
 						bikeList.add(bike);
 						i++;
 					}
@@ -57,6 +58,10 @@ public class QuoteController {
 		return null;
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public ArrayList<Quote> getQuoteList(){
+	    return quoteList;
 	}
 
 }

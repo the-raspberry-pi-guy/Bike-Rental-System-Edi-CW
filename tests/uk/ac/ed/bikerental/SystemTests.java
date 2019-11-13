@@ -46,12 +46,21 @@ public class SystemTests {
     	ArrayList<BikeProvider> providers = new ArrayList<BikeProvider>();
     	providers.add(prov1);
     	providers.add(prov2);
-    	providers.add(prov3);
+    	providers.add(prov3); // Populate list with all providers in Scotland
     	Map<BikeType, Integer> bikes = new HashMap<>();
     	bikes.put(BMX, 1);
     	bikes.put(Street, 1);
     	controller.getQuotes(dates, providers, bikes, new Location("EH3 6ST", "A totally real address"));
-    	assertEquals(controller.quoteList.size(),1);
+    	
+    	for (Quote quote:controller.getQuoteList()) {
+    	    System.out.println(quote.getBookingRange().toString());
+    	    for (Bike bike: quote.getBikeList()) {
+    	        System.out.println(bike.toString());
+    	    }
+    	    System.out.println(quote.getProvider().getStoreName());
+    	}
+    	
+    	assertEquals(controller.getQuoteList().size(),1);
     }
     
 }

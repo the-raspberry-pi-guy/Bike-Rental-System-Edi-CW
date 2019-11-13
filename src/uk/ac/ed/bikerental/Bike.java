@@ -23,6 +23,10 @@ public class Bike {
     	return dateOfPurchase;
     }
     
+    public String toString() {
+        return String.format("%s %s", type.getBikeType(), dateOfPurchase);
+    }
+    
     public Boolean isAvailable(DateRange other) {
         // Tests if any of the dates in a range clash when the bike is not available
         for (DateRange range: datesBooked) {

@@ -54,7 +54,31 @@ public class BikeProvider {
 	    //TODO
 	}
 	
-	public ArrayList<Bike> getAvailableForType(BikeType type, DateRange dates) {
+	public String getStoreName() {
+        return storeName;
+    }
+
+    public ContactDetails getProviderDetails() {
+        return providerDetails;
+    }
+
+    public Map<String, String> getOpenHours() {
+        return openHours;
+    }
+
+    public ArrayList<BikeProvider> getPartners() {
+        return partners;
+    }
+
+    public Map<BikeType, BigDecimal> getTypePrice() {
+        return typePrice;
+    }
+
+    public ArrayList<Bike> getProviderBikes() {
+        return providerBikes;
+    }
+
+    public ArrayList<Bike> getAvailableForType(BikeType type, DateRange dates) {
 		ArrayList<Bike> bikes = new ArrayList<Bike>();
 		for(Bike bike: providerBikes) {
 			if(bike.getType() == type && bike.isAvailable(dates)) {
