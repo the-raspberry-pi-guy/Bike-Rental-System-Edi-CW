@@ -8,6 +8,8 @@ Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Soft
 ### - Start working on bookQuotes - need to generate Bookings - come back for Discord
 - Implement DeliveryService
 
+- - - -
+
 # Comprehensive List of JUnit Tests to Implement
 
 * Extension submodule tests:
@@ -56,7 +58,8 @@ These are tests that are important to demonstrate the success of a use-case:
   * Bike provider employee handles return with booking number:
     * If original bike provider, then process this
     * If partner return, process this and use DeliveryService to return bikes to original provider
-    
+
+Other notes:
 * "May want to include tests to check the integration of the modules of the system"
 * SystemTest.java serves as primary evidence of correct function of system
 
