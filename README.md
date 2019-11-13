@@ -10,11 +10,11 @@ Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Soft
 
 # Comprehensive List of JUnit Tests to Implement
 
-*Extension submodule tests:
-  *Test linear depreciation
-  *Test double declining balance depreciation
-  *Test that bikes don't depreciate past 0
-    *(Ensure that the submodule is particularly correct, high quality in maintainability and readability)
+* Extension submodule tests:
+  * Test linear depreciation
+  * Test double declining balance depreciation
+  * Test that bikes don't depreciate past 0
+    * (Ensure that the submodule is particularly correct, high quality in maintainability and readability)
     
 *DateRange class tests:
   *Test the overlaps method returns correct boolean result for:
