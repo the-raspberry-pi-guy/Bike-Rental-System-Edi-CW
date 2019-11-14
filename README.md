@@ -23,7 +23,7 @@ Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Soft
   * Test the overlaps method returns correct boolean result for:
     * Overlapping period :white_check_mark:
     * Non-overlapping period :white_check_mark:
-    * Single day period - dates on the same day
+    * Single day period - dates on the same day :white_check_mark:
     * Overlapping dates the opposite way round
     
 * Location class tests:
