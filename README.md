@@ -2,8 +2,9 @@
 Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Software Engineering 2nd year course at The University of Edinburgh
 
 ## List of things to do next
-- Add pricing functionality to QuoteController - Harry to add pricing stuff
-- Add more thorough and reformat to be @BeforeAll for the tests so far - Matt to work on JUnit stuff
+- Matt to implement last DateRange test and fix the backwards overlap
+- Matt to test Harry's pricing code
+- Harry to implement Book Quotes
 
 ### - Start working on bookQuotes - need to generate Bookings - come back for Discord
 - Implement DeliveryService
@@ -20,8 +21,8 @@ Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Soft
     
 * DateRange class tests:
   * Test the overlaps method returns correct boolean result for:
-    * Overlapping period
-    * Non-overlapping period
+    * Overlapping period :white_check_mark:
+    * Non-overlapping period :white_check_mark:
     * Single day period - dates on the same day
     * Overlapping dates the opposite way round
     
@@ -89,6 +90,3 @@ Ideas:
 * Catching that the dates trying to rent are not before the actual purchase date of the bike
 * Catching invalid postcodes and location information
 * More suggestions...
-
-
-
