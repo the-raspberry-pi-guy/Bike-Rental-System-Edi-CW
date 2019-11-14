@@ -35,8 +35,13 @@ public class DateRange {
     }
 
     public Boolean overlaps(DateRange otherDate) {
-    	return (this.start.isBefore(otherDate.end)) && ( this.end.isAfter(otherDate.start)); 
+        if (this.equals(otherDate)) {
+            return true;
+        } else {
+            return (this.start.isBefore(otherDate.end)) && (this.end.isAfter(otherDate.start)); 
+        }
     }
+        
 
     @Override
     public int hashCode() {

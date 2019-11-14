@@ -47,7 +47,7 @@ class DoubleDecliningBalanceDepreciationTest {
     }
  
     @Test
-    @DisplayName("Second test")
+    @DisplayName("Second Test")
     void secondTest() {
         // Double Declining Balance Depreciation on a 2 year old street bike with starting value of £2000
         System.out.println("Testing Double Declining Balance Depreciation with extra values");
