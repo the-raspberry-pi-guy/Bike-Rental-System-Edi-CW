@@ -48,6 +48,11 @@ public class SystemTests {
     	providers.add(prov2);
     	providers.add(prov3); // Populate list with all providers in Scotland
     	Map<BikeType, Integer> bikes = new HashMap<>();
+    	prov1.setTypePrice(BMX, new BigDecimal(50));
+    	prov1.setTypePrice(Street, new BigDecimal(60));
+    	prov2.setTypePrice(BMX, new BigDecimal(50));
+    	prov2.setTypePrice(Street, new BigDecimal(60));
+    	prov3.setTypePrice(Street, new BigDecimal(50));
     	bikes.put(BMX, 1);
     	bikes.put(Street, 1);
     	controller.getQuotes(dates, providers, bikes, new Location("EH3 6ST", "A totally real address"));

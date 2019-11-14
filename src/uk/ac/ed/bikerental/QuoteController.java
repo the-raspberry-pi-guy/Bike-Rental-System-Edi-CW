@@ -1,5 +1,7 @@
 package uk.ac.ed.bikerental;
 
+import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -13,6 +15,7 @@ public class QuoteController {
 	}
 
 	public Collection<Quote> getQuotes(DateRange dates, ArrayList<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location) {
+		quoteList.clear();
 		Collection<BikeProvider> nearbyProviders = getNearbyProviders(allBikeProviders, location);
 		for(BikeProvider provider:nearbyProviders) {
 			Quote result = getQuoteForProvider(dates, provider, bikes);
@@ -50,8 +53,27 @@ public class QuoteController {
 				return null;
 			}
 		}
-		Quote quote = new Quote(dates, provider, bikeList);
+		BigDecimal totalPrice = getTotalPrice(bikes, provider, dates);
+		if(totalPrice == null) {
+			return null;
+		}
+		Quote quote = new Quote(dates, provider, bikeList, totalPrice);
 		return quote;
+	}
+
+	private BigDecimal getTotalPrice(Map<BikeType, Integer> bikes, BikeProvider provider, DateRange dates) {
+		BigDecimal totalPrice = new BigDecimal(0);
+		for(Map.Entry<BikeType,Integer> currentType:bikes.entrySet()){
+			BigDecimal dailyPrice = provider.getDailyPrice(currentType.getKey());
+			if(dailyPrice == null) {
+				System.out.println(String.format("No daily price for bikeType %s from provider %s", currentType.getKey().getBikeType(),provider.getStoreName()));
+				return null;
+			}
+			BigDecimal typePrice = dailyPrice.multiply(new BigDecimal(currentType.getValue()));
+			typePrice = typePrice.multiply(new BigDecimal(ChronoUnit.DAYS.between(dates.getStart(),dates.getEnd())+1));
+			totalPrice = totalPrice.add(typePrice);
+		}
+		return totalPrice;
 	}
 
 	public Booking bookQuote(Quote chosenQuote) {

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class BikeProvider {
 		
 		partners = new ArrayList<BikeProvider>();
 	    providerBikes = new ArrayList<Bike>();
+	    typePrice = new HashMap<BikeType, BigDecimal>();
 	}
 	
 	public void addBiketoStore(Bike bike) {
@@ -34,8 +36,11 @@ public class BikeProvider {
 	}
 	
 	public void setTypePrice(BikeType type, BigDecimal dailyRentalPrice) {
-	    //TODO
-	    // Check if the store has a bike type category
+		if(typePrice.containsKey(type)) {
+			typePrice.replace(type, dailyRentalPrice);
+		} else {
+		    typePrice.put(type, dailyRentalPrice);
+		}
 	}
 	
 	public void addPartner(BikeProvider otherProvider) {
@@ -72,6 +77,14 @@ public class BikeProvider {
 
     public Map<BikeType, BigDecimal> getTypePrice() {
         return typePrice;
+    }
+    
+    public BigDecimal getDailyPrice(BikeType type) {
+    	if(typePrice.containsKey(type)) {
+        	return typePrice.get(type);
+    	} else {
+    		return null;
+    	}
     }
 
     public ArrayList<Bike> getProviderBikes() {
