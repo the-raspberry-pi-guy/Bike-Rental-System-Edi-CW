@@ -10,6 +10,40 @@ Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Soft
 - Implement DeliveryService
 
 - - - -
+# Changes Needed to Coursework 2
+
+#### UML Class Diagram
+Classes:
+* Add BikeType class to UML diagram, replacement value for the BikeType
+* Implement partnership using associations (self-association)
+* Record bike status in class
+* Where do you keep "book information"?
+Attributes & Methods:
+* Consider each bike and booking has status - what data structure? DON'T use String
+Associations:
+* Consider partnership association (as in Classes)
+
+#### UML Sequence Diagram:
+* Use correct notation when calling/using method/operation of objects (Lecture 6 page 21)
+* Keep in mind that the diagram shows interaction between classes and hence needs to call appropriate methods
+Class Interactions in Sequence Diagram:
+* Use colon before name of class (Lecture 6 page 21)
+* DON'T use verbal things - write method names from UML class diagram
+Iterative Behaviour in Sequence Diagram:
+* Use loop/alt/opt for the if-else structure in design
+
+#### UML Communication Diagram:
+* Use formal method/operation calls as communication diagram is about dynamic interactions between objects - exhcnaging messages to each other (Lecture 6, page 16)
+* Should change status of the bike
+Same for the other diagrams
+
+#### Integration of Design Extension
+* DepositValuation should be related to another class rather than bike? Who is reponsible for these jobds (depsoit and price policies)?
+
+#### Justification of Software Engineering Principles
+* Add discussion about principles discussed in the course and refer where you applied these principles
+
+- - - -
 
 # Comprehensive List of JUnit Tests to Implement
 
