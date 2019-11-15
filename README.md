@@ -20,7 +20,7 @@ Classes:
 * Where do you keep "book information"?
 
 Attributes & Methods:
-* Consider each bike and booking has status - what data structure? DON'T use String
+* Consider each bike and booking has status - what data structure? DON'T use String - USE ENUMS
 
 Associations:
 * Consider partnership association (as in Classes)
