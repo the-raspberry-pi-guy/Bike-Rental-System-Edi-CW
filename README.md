@@ -14,16 +14,16 @@ Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Soft
 
 #### UML Class Diagram
 Classes:
-* Add BikeType class to UML diagram, replacement value for the BikeType
-* Implement partnership using associations (self-association)
-* Record bike status in class
-* Where do you keep "book information"?
+* Add BikeType class to UML diagram, replacement value for the BikeType :white_check_mark:
+* Implement partnership using associations (self-association) :white_check_mark:
+* Record bike status in class :white_check_mark:
+* Where do you keep "book information"? :white_check_mark:
 
 Attributes & Methods:
-* Consider each bike and booking has status - what data structure? DON'T use String - USE ENUMS
+* Consider each bike and booking has status - what data structure? DON'T use String - USE ENUMS :white_check_mark:
 
 Associations:
-* Consider partnership association (as in Classes)
+* Consider partnership association (as in Classes) :white_check_mark:
 
 #### UML Sequence Diagram:
 * Use correct notation when calling/using method/operation of objects (Lecture 6 page 21)
@@ -42,8 +42,8 @@ Iterative Behaviour in Sequence Diagram:
 
 Same for the other diagrams
 
-#### Integration of Design Extension
-* DepositValuation should be related to another class rather than bike? Who is reponsible for these jobds (depsoit and price policies)?
+#### Integration of Design Extension :white_check_mark:
+* DepositValuation should be related to another class rather than bike? Who is reponsible for these jobs (depsoit and price policies)?
 
 #### Justification of Software Engineering Principles
 * Add discussion about principles discussed in the course and refer where you applied these principles
