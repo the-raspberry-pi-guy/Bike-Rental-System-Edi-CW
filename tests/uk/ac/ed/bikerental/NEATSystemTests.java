@@ -133,10 +133,6 @@ public class NEATSystemTests {
         expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("1600"), new BigDecimal("160")));
         expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000"), new BigDecimal("300")));
         
-        System.out.println("- - - -");
-        System.out.println(expected.toString());
-        System.out.println(result.toString());
-        
         assertEquals(expected, result);
     }
 }

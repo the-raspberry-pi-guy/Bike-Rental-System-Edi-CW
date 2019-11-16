@@ -64,7 +64,6 @@ public class QuoteController {
 
 	private BigDecimal getTotalPrice(Map<BikeType, Integer> desiredBikeMap, BikeProvider provider, DateRange dates) {
 		BigDecimal totalPrice = new BigDecimal("0");
-		System.out.println(desiredBikeMap.toString());
 		for(Map.Entry<BikeType,Integer> currentType:desiredBikeMap.entrySet()){
 			BigDecimal dailyPrice = provider.getDailyPrice(currentType.getKey());
 			if(dailyPrice == null) { // Meant to return null if a daily price has not been set
