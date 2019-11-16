@@ -37,9 +37,9 @@ public class QuoteController {
 		return nearbyProviders;
 	}
 
-	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> bikes) {
+	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
 		ArrayList<Bike> bikeList = new ArrayList<Bike>(); // Initialise bikeList
-		for(Map.Entry<BikeType,Integer> chosenType:bikes.entrySet()) { // For each bike in the desired order
+		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
 			ArrayList<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
 			if(available.size() >= chosenType.getValue()) { // If there are enough available bikes, get them, else return null
 				int i = 0; 
@@ -53,7 +53,7 @@ public class QuoteController {
 				return null;
 			}
 		}
-		BigDecimal totalPrice = getTotalPrice(bikes, provider, dates);
+		BigDecimal totalPrice = getTotalPrice(desiredBikeMap, provider, dates);
 		if(totalPrice == null) {
 			return null;
 		}
@@ -61,16 +61,16 @@ public class QuoteController {
 		return quote;
 	}
 
-	private BigDecimal getTotalPrice(Map<BikeType, Integer> bikes, BikeProvider provider, DateRange dates) {
+	private BigDecimal getTotalPrice(Map<BikeType, Integer> desiredBikeMap, BikeProvider provider, DateRange dates) {
 		BigDecimal totalPrice = new BigDecimal(0);
-		for(Map.Entry<BikeType,Integer> currentType:bikes.entrySet()){
+		for(Map.Entry<BikeType,Integer> currentType:desiredBikeMap.entrySet()){
 			BigDecimal dailyPrice = provider.getDailyPrice(currentType.getKey());
-			if(dailyPrice == null) {
+			if(dailyPrice == null) { // Meant to return null if a daily price has not been set
 				System.out.println(String.format("No daily price for bikeType %s from provider %s", currentType.getKey().getBikeType(),provider.getStoreName()));
 				return null;
 			}
-			BigDecimal typePrice = dailyPrice.multiply(new BigDecimal(currentType.getValue()));
-			typePrice = typePrice.multiply(new BigDecimal(ChronoUnit.DAYS.between(dates.getStart(),dates.getEnd())+1));
+			BigDecimal typePrice = dailyPrice.multiply(new BigDecimal(currentType.getValue())); // Multiply by the number of desired bikes of that type
+			typePrice = typePrice.multiply(new BigDecimal(ChronoUnit.DAYS.between(dates.getStart(),dates.getEnd())+1)); // Multiplies by the number of days
 			totalPrice = totalPrice.add(typePrice);
 		}
 		return totalPrice;

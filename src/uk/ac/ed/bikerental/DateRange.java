@@ -38,7 +38,8 @@ public class DateRange {
         if (this.equals(otherDate)) {
             return true;
         } else {
-            return (this.start.isBefore(otherDate.end)) && (this.end.isAfter(otherDate.start)); 
+            return (this.start.isBefore(otherDate.end) || this.start.isEqual(otherDate.end)) 
+                    && (this.end.isAfter(otherDate.start) || this.end.isEqual(otherDate.start)); 
         }
     }
         

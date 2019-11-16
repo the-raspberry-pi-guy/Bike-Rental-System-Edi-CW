@@ -75,7 +75,7 @@ public class BikeProvider {
         return partners;
     }
 
-    public Map<BikeType, BigDecimal> getTypePrice() {
+    public Map<BikeType, BigDecimal> getTypePriceMap() {
         return typePrice;
     }
     
