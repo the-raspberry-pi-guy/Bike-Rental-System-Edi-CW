@@ -52,23 +52,23 @@ Same for the other diagrams
 
 # Comprehensive List of JUnit Tests to Implement
 
-* Extension submodule tests:
+* Extension submodule tests: :white_check_mark: :white_check_mark: :white_check_mark:
   * Test linear depreciation :white_check_mark:
   * Test double declining balance depreciation :white_check_mark:
   * Test that bikes don't depreciate past 0 :white_check_mark:
     * (Ensure that the submodule is particularly correct, high quality in maintainability and readability)
     
-* DateRange class tests:
+* DateRange class tests: :white_check_mark: :white_check_mark: :white_check_mark:
   * Test the overlaps method returns correct boolean result for:
     * Overlapping period :white_check_mark:
     * Non-overlapping period :white_check_mark:
     * Single day period - dates on the same day :white_check_mark:
-    * Overlapping dates the opposite way round
+    * Overlapping dates the opposite way round :white_check_mark:
     
-* Location class tests:
+* Location class tests: :white_check_mark: :white_check_mark: :white_check_mark:
   * Test the isNearTo method returns correct boolean result for:
-    * Locations that share the same 2-digit postcode start
-    * Locations that don't share the same 2-digit postcode start
+    * Locations that share the same 2-digit postcode start :white_check_mark:
+    * Locations that don't share the same 2-digit postcode start :white_check_mark:
 
 ^^^ These tests are all to be handed-in
 
