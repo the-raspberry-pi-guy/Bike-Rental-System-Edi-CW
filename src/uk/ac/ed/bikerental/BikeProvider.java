@@ -27,6 +27,10 @@ public class BikeProvider {
 	    typePrice = new HashMap<BikeType, BigDecimal>();
 	}
 	
+	public String toString() {
+	    return ("Provider: " + storeName + " " + providerDetails.toString());
+	}
+	
 	public void addBiketoStore(Bike bike) {
 	    providerBikes.add(bike);
 	}
@@ -104,4 +108,59 @@ public class BikeProvider {
 	public ContactDetails getContactDetails() {
 		return this.providerDetails;
 	}
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((openHours == null) ? 0 : openHours.hashCode());
+        result = prime * result + ((partners == null) ? 0 : partners.hashCode());
+        result = prime * result + ((providerBikes == null) ? 0 : providerBikes.hashCode());
+        result = prime * result + ((providerDetails == null) ? 0 : providerDetails.hashCode());
+        result = prime * result + ((storeName == null) ? 0 : storeName.hashCode());
+        result = prime * result + ((typePrice == null) ? 0 : typePrice.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BikeProvider other = (BikeProvider) obj;
+        if (openHours == null) {
+            if (other.openHours != null)
+                return false;
+        } else if (!openHours.equals(other.openHours))
+            return false;
+        if (partners == null) {
+            if (other.partners != null)
+                return false;
+        } else if (!partners.equals(other.partners))
+            return false;
+        if (providerBikes == null) {
+            if (other.providerBikes != null)
+                return false;
+        } else if (!providerBikes.equals(other.providerBikes))
+            return false;
+        if (providerDetails == null) {
+            if (other.providerDetails != null)
+                return false;
+        } else if (!providerDetails.equals(other.providerDetails))
+            return false;
+        if (storeName == null) {
+            if (other.storeName != null)
+                return false;
+        } else if (!storeName.equals(other.storeName))
+            return false;
+        if (typePrice == null) {
+            if (other.typePrice != null)
+                return false;
+        } else if (!typePrice.equals(other.typePrice))
+            return false;
+        return true;
+    }
 }
