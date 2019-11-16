@@ -16,15 +16,17 @@ public class BikeProvider {
 	private ArrayList<BikeProvider> partners;
 	private Map<BikeType, BigDecimal> typePrice; // Map from Bike Type to BigDecimal price
 	private ArrayList<Bike> providerBikes;
+	private BigDecimal depositRate;
 	
 	public BikeProvider(String name, ContactDetails providerDetails, Map<String, String> openHours) {
 		this.storeName = name;
 		this.providerDetails = providerDetails;
 		this.openHours = openHours;
 		
-		partners = new ArrayList<BikeProvider>();
-	    providerBikes = new ArrayList<Bike>();
-	    typePrice = new HashMap<BikeType, BigDecimal>();
+		this.partners = new ArrayList<BikeProvider>();
+	    this.providerBikes = new ArrayList<Bike>();
+	    this.typePrice = new HashMap<BikeType, BigDecimal>();
+	    this.depositRate = new BigDecimal("0");
 	}
 	
 	
@@ -48,6 +50,14 @@ public class BikeProvider {
 		} else {
 		    typePrice.put(type, dailyRentalPrice);
 		}
+	}
+	
+	public BigDecimal getDepositRate() {
+        return depositRate;
+    }
+
+    public void setDepositRate(BigDecimal rate) {
+	    this.depositRate = rate;
 	}
 	
 	public void addPartner(BikeProvider otherProvider) {
@@ -116,6 +126,7 @@ public class BikeProvider {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((depositRate == null) ? 0 : depositRate.hashCode());
         result = prime * result + ((openHours == null) ? 0 : openHours.hashCode());
         result = prime * result + ((partners == null) ? 0 : partners.hashCode());
         result = prime * result + ((providerBikes == null) ? 0 : providerBikes.hashCode());
@@ -134,6 +145,11 @@ public class BikeProvider {
         if (getClass() != obj.getClass())
             return false;
         BikeProvider other = (BikeProvider) obj;
+        if (depositRate == null) {
+            if (other.depositRate != null)
+                return false;
+        } else if (!depositRate.equals(other.depositRate))
+            return false;
         if (openHours == null) {
             if (other.openHours != null)
                 return false;

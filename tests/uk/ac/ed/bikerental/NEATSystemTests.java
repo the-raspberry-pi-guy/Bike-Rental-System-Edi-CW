@@ -64,6 +64,8 @@ public class NEATSystemTests {
         // Set ediProvider1 daily rental prices
         ediProvider1.setTypePrice(street, new BigDecimal("50"));
         ediProvider1.setTypePrice(mountain, new BigDecimal("40"));
+        // Set ediProvider1 deposit rate
+        ediProvider1.setDepositRate(new BigDecimal("5"));
         
         // ediProvider2 has stock of: 3 street bikes, 0 mountain bikes, 2 BMX bikes
         ediProvider2.addBiketoStore(new Bike(street, LocalDate.of(2017, 5, 21)));
@@ -74,6 +76,8 @@ public class NEATSystemTests {
         // Set ediProvider2 daily rental prices
         ediProvider2.setTypePrice(street, new BigDecimal("70"));
         ediProvider2.setTypePrice(bmx, new BigDecimal("20"));
+        // Set ediProvider2 deposit rate
+        ediProvider2.setDepositRate(new BigDecimal("10"));
 
         // ediProvider3 has stock of: 2 street bikes, 1 mountain bike, 1 BMX bike
         ediProvider3.addBiketoStore(new Bike(street, LocalDate.of(2018, 5, 21)));
@@ -84,6 +88,8 @@ public class NEATSystemTests {
         ediProvider3.setTypePrice(street, new BigDecimal("45"));
         ediProvider3.setTypePrice(mountain, new BigDecimal("30"));
         ediProvider3.setTypePrice(bmx, new BigDecimal("10"));
+        // Set ediProvider3 deposit rate
+        ediProvider3.setDepositRate(new BigDecimal("30"));
 
         // glasgowProvider1 has stock of: 2 street bikes, 0 mountain bikes, 1 BMX bikes
         glasgowProvider1.addBiketoStore(new Bike(street, LocalDate.of(2015, 5, 21)));
@@ -92,6 +98,8 @@ public class NEATSystemTests {
         // Set glasgowProvider1 daily rental prices
         glasgowProvider1.setTypePrice(street, new BigDecimal("30"));
         glasgowProvider1.setTypePrice(bmx, new BigDecimal("8"));
+        // Set glasgowProvider1 deposit rate
+        ediProvider1.setDepositRate(new BigDecimal("40"));
         
         // Setup Quote Controller
         this.controller = new QuoteController();
@@ -122,8 +130,8 @@ public class NEATSystemTests {
         ArrayList<Quote> expected = new ArrayList<Quote>();
         ArrayList<Bike> returnedExpectedBikes = new ArrayList<Bike>(Arrays.asList(
                 new Bike(street, null), new Bike(street, null), new Bike(bmx, null)));
-        expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("1600")));
-        expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000")));
+        expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("1600"), new BigDecimal("160")));
+        expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000"), new BigDecimal("300")));
         
         System.out.println("- - - -");
         System.out.println(expected.toString());

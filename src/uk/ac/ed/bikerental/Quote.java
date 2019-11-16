@@ -10,13 +10,19 @@ public class Quote {
 	private BikeProvider provider;
 	private ArrayList<Bike> bikeList;
 	private BigDecimal totalPrice;
+	private BigDecimal totalDeposit;
 
-	public Quote(DateRange range, BikeProvider provider, ArrayList<Bike> bikeList, BigDecimal totalPrice) {
+	public Quote(DateRange range, BikeProvider provider, ArrayList<Bike> bikeList, BigDecimal totalPrice, BigDecimal totalDeposit) {
 		this.bookingRange = range;
 		this.provider = provider;
 		this.bikeList = bikeList;
 		this.totalPrice = totalPrice;
+		this.totalDeposit = totalDeposit;
 	}
+
+    public BigDecimal getTotalDeposit() {
+        return totalDeposit;
+    }
 
     public DateRange getBookingRange() {
         return bookingRange;
@@ -37,7 +43,7 @@ public class Quote {
     @Override
     public String toString() {
         return "Quote [bookingRange=" + bookingRange + ", provider=" + provider + ", bikeList=" + bikeList
-                + ", totalPrice=" + totalPrice + "]";
+                + ", totalPrice=" + totalPrice + ", totalDeposit=" + totalDeposit + "]";
     }
 
     @Override
@@ -47,6 +53,7 @@ public class Quote {
         result = prime * result + ((bikeList == null) ? 0 : bikeList.hashCode());
         result = prime * result + ((bookingRange == null) ? 0 : bookingRange.hashCode());
         result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+        result = prime * result + ((totalDeposit == null) ? 0 : totalDeposit.hashCode());
         result = prime * result + ((totalPrice == null) ? 0 : totalPrice.hashCode());
         return result;
     }
@@ -75,10 +82,15 @@ public class Quote {
                 return false;
         } else if (!provider.equals(other.provider))
             return false;
+        if (totalDeposit == null) {
+            if (other.totalDeposit != null)
+                return false;
+        } else if (!totalDeposit.stripTrailingZeros().equals(other.totalDeposit.stripTrailingZeros()))
+            return false;
         if (totalPrice == null) {
             if (other.totalPrice != null)
                 return false;
-        } else if (!totalPrice.equals(other.totalPrice))
+        } else if (!totalPrice.stripTrailingZeros().equals(other.totalPrice.stripTrailingZeros()))
             return false;
         return true;
     }

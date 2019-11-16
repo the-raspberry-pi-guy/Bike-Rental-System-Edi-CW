@@ -57,7 +57,8 @@ public class QuoteController {
 		if(totalPrice == null) {
 			return null;
 		}
-		Quote quote = new Quote(dates, provider, bikeList, totalPrice);
+		BigDecimal totalDeposit = getDeposit(totalPrice, provider);
+		Quote quote = new Quote(dates, provider, bikeList, totalPrice, totalDeposit);
 		return quote;
 	}
 
@@ -76,6 +77,13 @@ public class QuoteController {
 		}
 		return totalPrice;
 	}
+	
+	// Calculates the deposit given a total price and a bike provider
+	private BigDecimal getDeposit(BigDecimal totalPrice, BikeProvider provider) {
+	    BigDecimal priceDepositMultiplier = new BigDecimal("1").subtract(provider.getDepositRate().divide
+	                                                (new BigDecimal("100")));
+	    return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
+	}
 
 	public Booking bookQuote(Quote chosenQuote) {
 		return null;
@@ -86,5 +94,6 @@ public class QuoteController {
 	public ArrayList<Quote> getQuoteList(){
 	    return quoteList;
 	}
+
 
 }
