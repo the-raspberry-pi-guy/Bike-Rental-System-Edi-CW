@@ -33,10 +33,11 @@ public class Quote {
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
-    
+
+    @Override
     public String toString() {
-        return ("Quote: " + bookingRange.toString() + " " + provider.toString() + " " + bikeList.toString()
-                        + " " + totalPrice.toPlainString());
+        return "Quote [bookingRange=" + bookingRange + ", provider=" + provider + ", bikeList=" + bikeList
+                + ", totalPrice=" + totalPrice + "]";
     }
 
     @Override

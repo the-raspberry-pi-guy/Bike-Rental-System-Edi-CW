@@ -2,7 +2,12 @@ package uk.ac.ed.bikerental;
 
 public class ContactDetails {
 	
-	private Location location;
+	@Override
+    public String toString() {
+        return "ContactDetails [location=" + location + ", phoneNo=" + phoneNo + "]";
+    }
+
+    private Location location;
 	private String phoneNo;
 
 	public ContactDetails(Location location, String phoneNo) {

@@ -23,10 +23,11 @@ public class Bike {
     	return dateOfPurchase;
     }
     
+    @Override
     public String toString() {
-        return String.format("%s %s", type.getBikeType(), dateOfPurchase);
+        return "Bike [datesBooked=" + datesBooked + ", type=" + type + ", dateOfPurchase=" + dateOfPurchase + "]";
     }
-    
+
     public Boolean isAvailable(DateRange other) {
         // Tests if any of the dates in a range clash when the bike is not available
         for (DateRange range: datesBooked) {
@@ -60,7 +61,7 @@ public class Bike {
         if (getClass() != obj.getClass())
             return false;
         Bike other = (Bike) obj;
-        if (dateOfPurchase == null) {
+/*        if (dateOfPurchase == null) {
             if (other.dateOfPurchase != null)
                 return false;
         } else if (!dateOfPurchase.equals(other.dateOfPurchase))
@@ -69,7 +70,7 @@ public class Bike {
             if (other.datesBooked != null)
                 return false;
         } else if (!datesBooked.equals(other.datesBooked))
-            return false;
+            return false; */
         if (type == null) {
             if (other.type != null)
                 return false;

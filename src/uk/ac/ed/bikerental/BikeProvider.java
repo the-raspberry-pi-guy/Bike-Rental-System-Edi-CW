@@ -27,11 +27,14 @@ public class BikeProvider {
 	    typePrice = new HashMap<BikeType, BigDecimal>();
 	}
 	
-	public String toString() {
-	    return ("Provider: " + storeName + " " + providerDetails.toString());
-	}
 	
-	public void addBiketoStore(Bike bike) {
+	@Override
+    public String toString() {
+        return "BikeProvider [storeName=" + storeName + ", providerDetails=" + providerDetails + "]";
+    }
+
+
+    public void addBiketoStore(Bike bike) {
 	    providerBikes.add(bike);
 	}
 	

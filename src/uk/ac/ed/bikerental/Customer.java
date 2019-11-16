@@ -14,6 +14,12 @@ public class Customer {
 		this.deleteFlag = deleteFlag;
 	}
 
+    @Override
+    public String toString() {
+        return "Customer [firstName=" + firstName + ", surname=" + surname + ", customerDetails=" + customerDetails
+                + "]";
+    }
+
     public String getFirstName() {
         return firstName;
     }

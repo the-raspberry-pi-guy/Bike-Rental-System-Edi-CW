@@ -50,5 +50,10 @@ public class BikeType {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "BikeType [typeModel=" + typeModel + ", replacementValue=" + replacementValue + "]";
+    }
     
 }

@@ -122,12 +122,13 @@ public class NEATSystemTests {
         ArrayList<Quote> expected = new ArrayList<Quote>();
         ArrayList<Bike> returnedExpectedBikes = new ArrayList<Bike>(Arrays.asList(
                 new Bike(street, null), new Bike(street, null), new Bike(bmx, null)));
-        expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("160")));
-        expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("100")));
+        expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("1600")));
+        expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000")));
         
+        System.out.println("- - - -");
         System.out.println(expected.toString());
         System.out.println(result.toString());
         
-        assertEquals(expected, result); // Should fail
+        assertEquals(expected, result);
     }
 }

@@ -22,8 +22,9 @@ public class DateRange {
         return this.end;
     }
     
+    @Override
     public String toString() {
-        return String.format("%s %s", start, end);
+        return "DateRange [start=" + start + ", end=" + end + "]";
     }
 
     public long toYears() {

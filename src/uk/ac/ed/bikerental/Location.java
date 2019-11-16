@@ -26,8 +26,10 @@ public class Location {
         return address;
     }
     
+
+    @Override
     public String toString() {
-        return (postcode + ", " + address);
+        return "Location [postcode=" + postcode + ", address=" + address + "]";
     }
 
     @Override
