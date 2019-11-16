@@ -2,8 +2,8 @@
 Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Software Engineering 2nd year course at The University of Edinburgh
 
 ## List of things to do next
-- Matt to implement last DateRange test and fix the backwards overlap
-- Matt to test Harry's pricing code
+- Matt to implement last DateRange test and fix the backwards overlap :white_check_mark:
+- Matt to test Harry's pricing code :white_check_mark:
 - Harry to implement Book Quotes
 
 ### - Start working on bookQuotes - need to generate Bookings - come back for Discord
@@ -81,11 +81,13 @@ Same for the other diagrams
 
 These are tests that are important to demonstrate the success of a use-case:
 
-1. Finding a quote:
+1. Finding a quote: :white_check_mark: :white_check_mark: :white_check_mark:
   * Customer wants to find a quote for a booking on a given date range
   * System should return a list of all matching quotes, including: provider, bikes, price and deposit amounts
   * You should check that this EXCLUDES bikes which are already booked, and providers that are NOT near enough
     * System should test deposit valuation in standard and extended configuration
+
+<em>Completed testing for first use-case, though want to add another test to check that bikes that have unavailable dates are not displayed. This first requires book quotes to be implemented.</em>
     
 2. Booking a quote:
   * Customer wants to book a quote the system returned in 1.
