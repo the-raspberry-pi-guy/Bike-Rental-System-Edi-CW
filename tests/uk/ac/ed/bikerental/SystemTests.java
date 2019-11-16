@@ -15,9 +15,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class SystemTests {
-    ContactDetails prov1Details = new ContactDetails(new Location("EH1 1BR", "123 Test Street"), 123);
-    ContactDetails prov2Details = new ContactDetails(new Location("G21 1BS", "456 Test Street"), 456);
-    ContactDetails prov3Details = new ContactDetails(new Location("EH1 1BT", "789 Test Street"), 789);
+    ContactDetails prov1Details = new ContactDetails(new Location("EH1 1BR", "123 Test Street"), "123");
+    ContactDetails prov2Details = new ContactDetails(new Location("G21 1BS", "456 Test Street"), "456");
+    ContactDetails prov3Details = new ContactDetails(new Location("EH1 1BT", "789 Test Street"), "789");
     BikeProvider prov1 = new BikeProvider("Awesome Provider", prov1Details, new HashMap<String, String>());
     BikeProvider prov2 = new BikeProvider("Distant Provider", prov2Details, new HashMap<String, String>());
     BikeProvider prov3 = new BikeProvider("Bad Provider", prov3Details, new HashMap<String, String>());

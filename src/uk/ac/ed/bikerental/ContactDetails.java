@@ -3,9 +3,9 @@ package uk.ac.ed.bikerental;
 public class ContactDetails {
 	
 	private Location location;
-	private int phoneNo;
+	private String phoneNo;
 
-	public ContactDetails(Location location, int phoneNo) {
+	public ContactDetails(Location location, String phoneNo) {
 		this.location = location;
 		this.phoneNo = phoneNo;
 	}
@@ -14,7 +14,7 @@ public class ContactDetails {
 	    return location;
 	}
 	
-	public int getPhoneNo() {
+	public String getPhoneNo() {
 	    return phoneNo;   
 	}
 }
