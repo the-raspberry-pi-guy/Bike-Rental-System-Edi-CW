@@ -13,7 +13,6 @@ class TestDateRange {
     private DateRange dateRange1;
     private DateRange dateRange2;
     private DateRange dateRange3;
-    
     private DateRange customRange1;
     private DateRange customRange2;
     private DateRange customRange3;

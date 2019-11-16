@@ -5,7 +5,7 @@ public class Location {
     private String address;
     
     public Location(String postcode, String address) {
-        assert postcode.length() >= 6;
+        assert postcode.length() >= 6; // Catches postcodes that are not complete
         this.postcode = postcode;
         this.address = address;
     }
