@@ -131,3 +131,9 @@ Ideas:
 * Catching that the dates trying to rent are not before the actual purchase date of the bike
 * Catching invalid postcodes and location information
 * More suggestions...
+
+- - - -
+
+# Things to change
+
+* Feed a customer object into the quote controller
