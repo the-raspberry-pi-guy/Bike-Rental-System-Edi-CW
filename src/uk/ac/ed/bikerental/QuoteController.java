@@ -76,10 +76,10 @@ public class QuoteController {
 		return totalPrice;
 	}
 
-	public Booking bookQuote(Quote chosenQuote) {
-		return null;
-		// TODO Auto-generated method stub
+	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
 		
+		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), new BigDecimal(0));
+		return booking;
 	}
 	
 	public ArrayList<Quote> getQuoteList(){
