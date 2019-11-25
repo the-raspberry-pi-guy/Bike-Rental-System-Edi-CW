@@ -3,16 +3,25 @@ package uk.ac.ed.bikerental;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Bike {
+public class Bike implements Deliverable {
 	
 	private ArrayList<DateRange> datesBooked;
 	private BikeType type;
 	private LocalDate dateOfPurchase;
+	
+	enum Status {
+		IN_TRANSIT,
+		WITH_CUSTOMER,
+		IN_STORE
+	}
+	
+	private Status bikeStatus;
 
 	public Bike(BikeType type, LocalDate date) {
 		this.type = type;
 		this.dateOfPurchase = date;
 		datesBooked = new ArrayList<DateRange>();
+		this.bikeStatus = Status.IN_STORE;
 	}
 	
     public BikeType getType() {
@@ -78,5 +87,27 @@ public class Bike {
             return false;
         return true;
     }
+
+    // Below methods are currently pretty loose and flawed, but implement the interface.
+    
+	@Override
+	public void onPickup() {
+		
+		if(bikeStatus == Status.IN_STORE) {
+			bikeStatus = Status.IN_TRANSIT;
+		} else if(bikeStatus == Status.WITH_CUSTOMER) {
+			bikeStatus = Status.IN_TRANSIT;
+		}
+	}
+
+	@Override
+	public void onDropoff() {
+		
+		if(bikeStatus == Status.IN_TRANSIT && datesBooked.contains(LocalDate.now())) {
+			bikeStatus = Status.WITH_CUSTOMER;
+		} else {
+			bikeStatus = Status.IN_STORE;
+		}
+	}
     
 }

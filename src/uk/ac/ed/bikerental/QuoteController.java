@@ -86,7 +86,8 @@ public class QuoteController {
 
 	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
 		
-		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), new BigDecimal(0));
+		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
+		chosenQuote.getProvider().getBookingList().add(booking);
 		return booking;
 	}
 	
