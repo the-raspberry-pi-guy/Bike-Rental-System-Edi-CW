@@ -1,55 +1,8 @@
 # Bike-Rental-System
 Code for implementation of a Scotland-wide Bike Rental System for the Inf2C Software Engineering 2nd year course at The University of Edinburgh
 
-## List of things to do next
-- Matt to implement last DateRange test and fix the backwards overlap :white_check_mark:
-- Matt to test Harry's pricing code :white_check_mark:
-- Harry to implement Book Quotes
-
-### - Start working on bookQuotes - need to generate Bookings - come back for Discord
-- Implement DeliveryService
-
+- Implement DeliveryService - check the doc to just see if we have done correctly HARRY TO DO THIS
 - - - -
-# Changes Needed to Coursework 2
-
-#### UML Class Diagram
-Classes:
-* Add BikeType class to UML diagram, replacement value for the BikeType :white_check_mark:
-* Implement partnership using associations (self-association) :white_check_mark:
-* Record bike status in class :white_check_mark:
-* Where do you keep "book information"? :white_check_mark:
-
-Attributes & Methods:
-* Consider each bike and booking has status - what data structure? DON'T use String - USE ENUMS :white_check_mark:
-
-Associations:
-* Consider partnership association (as in Classes) :white_check_mark:
-
-#### UML Sequence Diagram:
-* Use correct notation when calling/using method/operation of objects (Lecture 6 page 21)
-* Keep in mind that the diagram shows interaction between classes and hence needs to call appropriate methods
-
-Class Interactions in Sequence Diagram:
-* Use colon before name of class (Lecture 6 page 21)
-* DON'T use verbal things - write method names from UML class diagram
-
-Iterative Behaviour in Sequence Diagram:
-* Use loop/alt/opt for the if-else structure in design
-
-#### UML Communication Diagram:
-* Use formal method/operation calls as communication diagram is about dynamic interactions between objects - exhcnaging messages to each other (Lecture 6, page 16)
-* Should change status of the bike
-
-Same for the other diagrams
-
-#### Integration of Design Extension :white_check_mark:
-* DepositValuation should be related to another class rather than bike? Who is reponsible for these jobs (depsoit and price policies)?
-
-#### Justification of Software Engineering Principles
-* Add discussion about principles discussed in the course and refer where you applied these principles
-
-- - - -
-
 # Comprehensive List of JUnit Tests to Implement
 
 * Extension submodule tests: :white_check_mark: :white_check_mark: :white_check_mark:
@@ -77,7 +30,7 @@ Same for the other diagrams
     * Test onPickUp updates the status of bookings and the bikes they contain
     * Test onDropoff updates the status of bookings and the bikes they contain
 
-### Tests by Use-Case
+### Tests by Use-Case - MATT TO FINISH OFF THE REST OF THE USECASE TESTS
 
 These are tests that are important to demonstrate the success of a use-case:
 
@@ -105,6 +58,46 @@ Other notes:
 * "May want to include tests to check the integration of the modules of the system"
 * SystemTest.java serves as primary evidence of correct function of system
 
+
+- - - -
+# Changes Needed to Coursework 2
+
+#### UML Class Diagram :white_check_mark: :white_check_mark: :white_check_mark:
+Classes:
+* Add BikeType class to UML diagram, replacement value for the BikeType :white_check_mark:
+* Implement partnership using associations (self-association) :white_check_mark:
+* Record bike status in class :white_check_mark:
+* Where do you keep "book information"? :white_check_mark:
+
+Attributes & Methods:
+* Consider each bike and booking has status - what data structure? DON'T use String - USE ENUMS :white_check_mark:
+
+Associations:
+* Consider partnership association (as in Classes) :white_check_mark:
+
+#### UML Sequence Diagram: :white_check_mark: :white_check_mark: :white_check_mark:
+* Use correct notation when calling/using method/operation of objects (Lecture 6 page 21) :white_check_mark:
+* Keep in mind that the diagram shows interaction between classes and hence needs to call appropriate methods :white_check_mark:
+
+Class Interactions in Sequence Diagram:
+* Use colon before name of class (Lecture 6 page 21) :white_check_mark:
+* DON'T use verbal things - write method names from UML class diagram :white_check_mark:
+
+Iterative Behaviour in Sequence Diagram:
+* Use loop/alt/opt for the if-else structure in design :white_check_mark:
+
+#### UML Communication Diagram: :white_check_mark: :white_check_mark: :white_check_mark:
+* Use formal method/operation calls as communication diagram is about dynamic interactions between objects - exchanging messages to each other (Lecture 6, page 16) :white_check_mark:
+* Should change status of the bike :white_check_mark:
+
+Same for the other diagrams
+
+#### Integration of Design Extension :white_check_mark: :white_check_mark: :white_check_mark:
+* DepositValuation should be related to another class rather than bike? Who is reponsible for these jobs (depsoit and price policies)?
+
+#### Justification of Software Engineering Principles
+* Add discussion about principles discussed in the course and refer where you applied these principles
+
 - - - -
 
 # Classes that are not worth testing/are tested in the overall system functionality:
@@ -112,7 +105,7 @@ Other notes:
 
 - - - -
 
-# Javadoc
+# Javadoc - HARRY DOES THIS
 
 Add class-level, method-level and field-level Javadoc comments to:
 
@@ -134,6 +127,6 @@ Ideas:
 
 - - - -
 
-# Things to change
+# Things to change - HARRY TO CHANGE THIS, MATT TO CHANGE TESTS TO DO THIS
 
 * Feed a customer object into the quote controller
