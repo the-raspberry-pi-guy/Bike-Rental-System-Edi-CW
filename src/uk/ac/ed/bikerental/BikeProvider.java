@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
 import java.util.Set;
+=======
+import java.util.UUID;
 
 public class BikeProvider {
 	
@@ -19,6 +22,7 @@ public class BikeProvider {
 	private Map<BikeType, BigDecimal> typePrice; // Map from Bike Type to BigDecimal price
 	private ArrayList<Bike> providerBikes;
 	private BigDecimal depositRate;
+	private BookingController bookingController;
 	
 	public BikeProvider(String name, ContactDetails providerDetails, Map<String, String> openHours) {
 		this.storeName = name;
@@ -29,6 +33,7 @@ public class BikeProvider {
 	    this.providerBikes = new ArrayList<Bike>();
 	    this.typePrice = new HashMap<BikeType, BigDecimal>();
 	    this.depositRate = new BigDecimal("0");
+	    bookingController = new BookingController(this);
 	}
 	
 	
@@ -70,12 +75,21 @@ public class BikeProvider {
 	    partners.remove(otherProvider);
 	}
 	
-	public void recordBikeReturn(int orderNo) {
-	    //TODO
+	public void recordBikeReturn(UUID orderNo) {
+	    for(Booking booking: bookingController.getBookingList()) {
+	    	if(booking.getOrderNo().equals(orderNo)) {
+	    		for(Bike bike: booking.getBikeList()) {
+	    			bike.onDropoff();
+	    			if(booking.getHireProvider() != this) {
+	    				notifyOriginalProvider(orderNo);
+	    			}
+	    		}
+	    	}
+	    }
 	}
 	
-	public void notifyOriginalProvider(int orderNo) {
-	    //TODO
+	public void notifyOriginalProvider(UUID orderNo) {
+	    System.out.println("The bikes from order " + orderNo.toString() + " have been returned to a partner store.");
 	}
 	
 	public String getStoreName() {
@@ -184,4 +198,9 @@ public class BikeProvider {
             return false;
         return true;
     }
+
+
+	public ArrayList<Booking> getBookingList() {
+		return bookingController.getBookingList();
+	}
 }
