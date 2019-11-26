@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class QuoteController {
 	
@@ -27,8 +29,8 @@ public class QuoteController {
 	}
 
 	// Takes in a large list of all providers in Scotland, and returns only providers that are near location
-	private ArrayList<BikeProvider> getNearbyProviders(ArrayList<BikeProvider> allBikeProviders, Location location) {
-		ArrayList<BikeProvider> nearbyProviders = new ArrayList<BikeProvider>();
+	private Set<BikeProvider> getNearbyProviders(ArrayList<BikeProvider> allBikeProviders, Location location) {
+		Set<BikeProvider> nearbyProviders = new HashSet<BikeProvider>();
 		for(BikeProvider provider:allBikeProviders) {
 			if(provider.getContactDetails().getLocation().isNearTo(location)) {
 				nearbyProviders.add(provider);
@@ -38,9 +40,9 @@ public class QuoteController {
 	}
 
 	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
-		ArrayList<Bike> bikeList = new ArrayList<Bike>(); // Initialise bikeList
+		Set<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
 		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
-			ArrayList<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
+			Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
 			if(available.size() >= chosenType.getValue()) { // If there are enough available bikes, get them, else return null
 				int i = 0; 
 				for(Bike bike:available) { // Get the first n bikes from the provider (where n is the desired number)

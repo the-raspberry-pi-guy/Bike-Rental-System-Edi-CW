@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class BikeProvider {
 	
@@ -108,8 +110,8 @@ public class BikeProvider {
         return providerBikes;
     }
 
-    public ArrayList<Bike> getAvailableForType(BikeType type, DateRange dates) {
-		ArrayList<Bike> bikes = new ArrayList<Bike>();
+    public Set<Bike> getAvailableForType(BikeType type, DateRange dates) {
+		Set<Bike> bikes = new HashSet<Bike>();
 		for(Bike bike: providerBikes) {
 			if(bike.getType() == type && bike.isAvailable(dates)) {
 				bikes.add(bike);

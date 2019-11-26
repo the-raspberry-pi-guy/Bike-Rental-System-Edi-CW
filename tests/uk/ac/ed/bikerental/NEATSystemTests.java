@@ -27,6 +27,11 @@ public class NEATSystemTests {
     private QuoteController controller;
     private ArrayList<BikeProvider> scottishBikeProviders;
 
+    @BeforeAll
+    static void startTests() {
+        System.out.println("Starting overall system tests");
+    }
+    
     @BeforeEach
     void setUp() throws Exception {
         // Setup mock delivery service before each tests
