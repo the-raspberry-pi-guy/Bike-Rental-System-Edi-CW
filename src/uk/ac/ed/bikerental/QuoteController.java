@@ -88,6 +88,9 @@ public class QuoteController {
 		
 		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
 		chosenQuote.getProvider().getBookingList().add(booking);
+		for(Bike bike: booking.getBikeList()) {
+			DeliveryServiceFactory.getDeliveryService().scheduleDelivery(bike, booking.getHireProvider().getProviderDetails().getLocation(), booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
+		}
 		return booking;
 	}
 	
