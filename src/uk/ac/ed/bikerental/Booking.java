@@ -2,6 +2,7 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class Booking {
@@ -13,10 +14,10 @@ public class Booking {
 	private BigDecimal depositAmount;
 	private boolean depositPaid;
 	private BikeProvider hireProvider;
-	private ArrayList<Bike> bikeList;
+	private HashSet<Bike> bikeList;
 	private Customer customer;
 
-	public Booking(DateRange hireDates, boolean requiresDelivery, BigDecimal totalPrice, BigDecimal depositAmount, ArrayList<Bike> bikeList, BikeProvider provider, Customer customer) {
+	public Booking(DateRange hireDates, boolean requiresDelivery, BigDecimal totalPrice, BigDecimal depositAmount, HashSet<Bike> bikeList, BikeProvider provider, Customer customer) {
 		this.hireDates = hireDates;
 		this.requiresDelivery = requiresDelivery;
 		this.totalPrice = totalPrice;
@@ -63,7 +64,7 @@ public class Booking {
 		return hireProvider;
 	}
 
-	public ArrayList<Bike> getBikeList() {
+	public HashSet<Bike> getBikeList() {
 		return bikeList;
 	}
 

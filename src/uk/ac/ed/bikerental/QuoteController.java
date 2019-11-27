@@ -40,7 +40,7 @@ public class QuoteController {
 	}
 
 	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
-		Set<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
+		HashSet<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
 		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
 			Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
 			if(available.size() >= chosenType.getValue()) { // If there are enough available bikes, get them, else return null

@@ -3,16 +3,17 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class Quote {
 	
 	private DateRange bookingRange;
 	private BikeProvider provider;
-	private ArrayList<Bike> bikeList;
+	private HashSet<Bike> bikeList;
 	private BigDecimal totalPrice;
 	private BigDecimal totalDeposit;
 
-	public Quote(DateRange range, BikeProvider provider, ArrayList<Bike> bikeList, BigDecimal totalPrice, BigDecimal totalDeposit) {
+	public Quote(DateRange range, BikeProvider provider, HashSet<Bike> bikeList, BigDecimal totalPrice, BigDecimal totalDeposit) {
 		this.bookingRange = range;
 		this.provider = provider;
 		this.bikeList = bikeList;
@@ -32,7 +33,7 @@ public class Quote {
         return provider;
     }
 
-    public ArrayList<Bike> getBikeList() {
+    public HashSet<Bike> getBikeList() {
         return bikeList;
     }
 
