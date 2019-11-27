@@ -103,7 +103,7 @@ public class Bike implements Deliverable {
 	@Override
 	public void onDropoff() {
 		
-		if(bikeStatus == Status.IN_TRANSIT && datesBooked.contains(LocalDate.now())) {
+		if(bikeStatus == Status.IN_TRANSIT) {
 			bikeStatus = Status.WITH_CUSTOMER;
 		} else {
 			bikeStatus = Status.IN_STORE;

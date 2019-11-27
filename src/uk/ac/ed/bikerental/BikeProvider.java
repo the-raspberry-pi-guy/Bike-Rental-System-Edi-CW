@@ -1,6 +1,7 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,8 +46,8 @@ public class BikeProvider {
 	    providerBikes.add(bike);
 	}
 	
-	public void addBikeTypetoStore(BikeType bikeType) {
-	    
+	public BikeType createBikeType(String name, BigDecimal replacementValue) {
+	    return new BikeType(name, replacementValue);
 	}
 	
 	public void setTypePrice(BikeType type, BigDecimal dailyRentalPrice) {
@@ -198,7 +199,7 @@ public class BikeProvider {
     }
 
 
-	public ArrayList<Booking> getBookingList() {
+	public HashSet<Booking> getBookingList() {
 		return bookingController.getBookingList();
 	}
 }

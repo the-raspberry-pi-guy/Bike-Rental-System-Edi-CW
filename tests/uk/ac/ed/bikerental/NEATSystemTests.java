@@ -132,8 +132,8 @@ public class NEATSystemTests {
                 bikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
 
         // Expected result
-        ArrayList<Quote> expected = new ArrayList<Quote>();
-        ArrayList<Bike> returnedExpectedBikes = new ArrayList<Bike>(Arrays.asList(
+        HashSet<Quote> expected = new HashSet<Quote>();
+        HashSet<Bike> returnedExpectedBikes = new HashSet<Bike>(Arrays.asList(
                 new Bike(street, null), new Bike(street, null), new Bike(bmx, null)));
         expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("1600"), new BigDecimal("160")));
         expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000"), new BigDecimal("300")));

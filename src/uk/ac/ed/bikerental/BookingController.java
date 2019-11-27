@@ -1,19 +1,28 @@
 package uk.ac.ed.bikerental;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
 
-public class BookingController {
+public class BookingController implements DeliveryService {
 
-	private ArrayList<Booking> bookingList;
+	private HashSet<Booking> bookingList;
 	private BikeProvider provider;
+	private HashMap<Bike, LocalDate> deliveries;
 
 	public BookingController(BikeProvider provider) {
 		this.provider = provider;
-		bookingList = new ArrayList<Booking>();
+		bookingList = new HashSet<Booking>();
 	}
 
-	public ArrayList<Booking> getBookingList() {
+	public HashSet<Booking> getBookingList() {
 		return bookingList;
+	}
+
+	@Override
+	public void scheduleDelivery(Deliverable bike, Location pickupLocation, Location dropoffLocation,
+			LocalDate pickupDate) {
+		deliveries.put((Bike) bike, pickupDate);
 	}
 	
 }
