@@ -1,13 +1,17 @@
 package uk.ac.ed.bikerental;
 
 import java.time.LocalDate;
+import java.util.UUID;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class Bike implements Deliverable {
 	
-	private ArrayList<DateRange> datesBooked;
+	private HashSet<DateRange> datesBooked;
 	private BikeType type;
 	private LocalDate dateOfPurchase;
+	private UUID bikeId;
 	
 	enum Status {
 		IN_TRANSIT,
@@ -20,8 +24,9 @@ public class Bike implements Deliverable {
 	public Bike(BikeType type, LocalDate date) {
 		this.type = type;
 		this.dateOfPurchase = date;
-		datesBooked = new ArrayList<DateRange>();
+		datesBooked = new HashSet<DateRange>();
 		this.bikeStatus = Status.IN_STORE;
+		this.bikeId = UUID.randomUUID();
 	}
 	
     public BikeType getType() {
@@ -53,12 +58,7 @@ public class Bike implements Deliverable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((dateOfPurchase == null) ? 0 : dateOfPurchase.hashCode());
-        result = prime * result + ((datesBooked == null) ? 0 : datesBooked.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
+        return Objects.hash(bikeStatus, dateOfPurchase, datesBooked, type);
     }
 
     @Override
@@ -70,22 +70,9 @@ public class Bike implements Deliverable {
         if (getClass() != obj.getClass())
             return false;
         Bike other = (Bike) obj;
-/*        if (dateOfPurchase == null) {
-            if (other.dateOfPurchase != null)
-                return false;
-        } else if (!dateOfPurchase.equals(other.dateOfPurchase))
-            return false;
-        if (datesBooked == null) {
-            if (other.datesBooked != null)
-                return false;
-        } else if (!datesBooked.equals(other.datesBooked))
-            return false; */
-        if (type == null) {
-            if (other.type != null)
-                return false;
-        } else if (!type.equals(other.type))
-            return false;
-        return true;
+        return bikeStatus == other.bikeStatus
+                && Objects.equals(dateOfPurchase, other.dateOfPurchase)
+                && Objects.equals(datesBooked, other.datesBooked) && Objects.equals(type, other.type);
     }
 
     // Below methods are currently pretty loose and flawed, but implement the interface.

@@ -10,13 +10,18 @@ import java.util.Set;
 
 public class QuoteController {
 	
-	private ArrayList<Quote> quoteList;
+	private HashSet<Quote> quoteList;
 
-	public QuoteController() {
-		quoteList = new ArrayList<Quote>();
+	@Override
+    public String toString() {
+        return "QuoteController [quoteList=" + quoteList + "]";
+    }
+
+    public QuoteController() {
+		quoteList = new HashSet<Quote>();
 	}
 
-	public Collection<Quote> getQuotes(DateRange dates, ArrayList<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location) {
+	public Set<Quote> getQuotes(DateRange dates, HashSet<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location) {
 		quoteList.clear();
 		Collection<BikeProvider> nearbyProviders = getNearbyProviders(allBikeProviders, location);
 		for(BikeProvider provider:nearbyProviders) {
@@ -29,7 +34,7 @@ public class QuoteController {
 	}
 
 	// Takes in a large list of all providers in Scotland, and returns only providers that are near location
-	private Set<BikeProvider> getNearbyProviders(ArrayList<BikeProvider> allBikeProviders, Location location) {
+	private Set<BikeProvider> getNearbyProviders(HashSet<BikeProvider> allBikeProviders, Location location) {
 		Set<BikeProvider> nearbyProviders = new HashSet<BikeProvider>();
 		for(BikeProvider provider:allBikeProviders) {
 			if(provider.getContactDetails().getLocation().isNearTo(location)) {
@@ -83,7 +88,7 @@ public class QuoteController {
 	private BigDecimal getDeposit(BigDecimal totalPrice, BikeProvider provider) {
 	    BigDecimal priceDepositMultiplier = new BigDecimal("1").subtract(provider.getDepositRate().divide
 	                                                (new BigDecimal("100")));
-	    return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
+	    return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)).stripTrailingZeros());
 	}
 
 	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
@@ -93,7 +98,7 @@ public class QuoteController {
 		return booking;
 	}
 	
-	public ArrayList<Quote> getQuoteList(){
+	public HashSet<Quote> getQuoteList(){
 	    return quoteList;
 	}
 

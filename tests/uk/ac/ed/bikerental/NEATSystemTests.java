@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -25,7 +26,7 @@ public class NEATSystemTests {
     private BikeType bmx;
     private BikeType mountain;
     private QuoteController controller;
-    private ArrayList<BikeProvider> scottishBikeProviders;
+    private HashSet<BikeProvider> scottishBikeProviders;
 
     @BeforeAll
     static void startTests() {
@@ -37,7 +38,6 @@ public class NEATSystemTests {
         // Setup mock delivery service before each tests
         DeliveryServiceFactory.setupMockDeliveryService();
         
-        // Put your test setup here
         // Setup for use-case 1: Finding a quote
         
         // New customer, with name, location and number. Wishes for details to be deleted after booking (true delete flag)
@@ -56,12 +56,13 @@ public class NEATSystemTests {
                 new ContactDetails(new Location("G2 7EX", "321 Bad Street"), "03434167543"), new HashMap<String, String>());
     
         // Create some example bike types with replacement values
-        this.street = new BikeType("Street", new BigDecimal("2000"));
-        this.bmx = new BikeType("BMX", new BigDecimal("400"));
-        this.mountain = new BikeType("Mountain", new BigDecimal("700"));
+        // EdiProvider1 is the instigator of these creations
+        this.street = ediProvider1.createBikeType("Street", new BigDecimal("2000"));
+        this.bmx = ediProvider1.createBikeType("BMX", new BigDecimal("400"));
+        this.mountain = ediProvider1.createBikeType("Mountain", new BigDecimal("700"));
         
         // Populate each store with some bikes
-        // ediProvider1 has stock of: 1 street bike, 4 mountain bikes, 0 BMX bikes
+        // ediProvider1 has stock of: 1 street bike, 3 mountain bikes, 0 BMX bikes
         ediProvider1.addBiketoStore(new Bike(street, LocalDate.of(2012, 5, 21)));
         ediProvider1.addBiketoStore(new Bike(mountain, LocalDate.of(2015, 4, 21)));
         ediProvider1.addBiketoStore(new Bike(mountain, LocalDate.of(2015, 3, 21)));
@@ -104,14 +105,15 @@ public class NEATSystemTests {
         glasgowProvider1.setTypePrice(street, new BigDecimal("30"));
         glasgowProvider1.setTypePrice(bmx, new BigDecimal("8"));
         // Set glasgowProvider1 deposit rate
-        ediProvider1.setDepositRate(new BigDecimal("40"));
+        glasgowProvider1.setDepositRate(new BigDecimal("40"));
         
         // Setup Quote Controller
         this.controller = new QuoteController();
+
         
         // Add all of the providers to a list of providers in Scotland
         this.scottishBikeProviders =
-                new ArrayList<BikeProvider>(Arrays.asList(ediProvider1, ediProvider2, ediProvider3, glasgowProvider1));
+                new HashSet<BikeProvider>(Arrays.asList(ediProvider1, ediProvider2, ediProvider3, glasgowProvider1));
     
     }
     
@@ -126,18 +128,44 @@ public class NEATSystemTests {
         bikes.put(street, 2);
         
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 10, 10), LocalDate.of(2019, 10, 20));
-        
-        // Get quotes in Edinburgh between 10th Nov and 20th Nov 2019, in EH postcodes
-        Collection<Quote> result = controller.getQuotes(desiredDates, scottishBikeProviders, 
-                bikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
 
         // Expected result
         HashSet<Quote> expected = new HashSet<Quote>();
         HashSet<Bike> returnedExpectedBikes = new HashSet<Bike>(Arrays.asList(
                 new Bike(street, null), new Bike(street, null), new Bike(bmx, null)));
+        
         expected.add(new Quote(desiredDates, ediProvider2, returnedExpectedBikes, new BigDecimal("1600"), new BigDecimal("160")));
         expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000"), new BigDecimal("300")));
         
+        // Get quotes in Edinburgh between 10th Nov and 20th Nov 2019, in EH postcodes
+        Set<Quote> result = controller.getQuotes(desiredDates, scottishBikeProviders, 
+                bikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+        
         assertEquals(expected, result);
+    }
+    
+    @Test
+    void singleReturn() {
+        Map<BikeType, Integer> bike = new HashMap<>();
+        bike.put(bmx, 1);
+        
+        DateRange desiredDates = new DateRange(LocalDate.of(2019, 10, 10), LocalDate.of(2019, 10, 20));
+        HashSet<Quote> expected = new HashSet<Quote>();
+
+        HashSet<Bike> returnedExpectedBikes = new HashSet<Bike>();
+        returnedExpectedBikes.add(new Bike(bmx, LocalDate.of(2009, 2, 21)));
+        
+        expected.add(new Quote(desiredDates, glasgowProvider1, returnedExpectedBikes, new BigDecimal("80"), new BigDecimal("32")));
+        ////
+        HashSet<Quote> result = new HashSet<Quote>();
+
+        HashSet<Bike> resultBikes = new HashSet<Bike>();
+        resultBikes.add(new Bike(bmx, LocalDate.of(2009, 2, 21)));
+        
+        result.add(new Quote(desiredDates, glasgowProvider1, resultBikes, new BigDecimal("80"), new BigDecimal("32")));
+        
+    
+        assertEquals(expected, result);
+
     }
 }

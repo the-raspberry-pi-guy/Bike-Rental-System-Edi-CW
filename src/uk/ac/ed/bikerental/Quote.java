@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class Quote {
 	
@@ -49,14 +50,7 @@ public class Quote {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((bikeList == null) ? 0 : bikeList.hashCode());
-        result = prime * result + ((bookingRange == null) ? 0 : bookingRange.hashCode());
-        result = prime * result + ((provider == null) ? 0 : provider.hashCode());
-        result = prime * result + ((totalDeposit == null) ? 0 : totalDeposit.hashCode());
-        result = prime * result + ((totalPrice == null) ? 0 : totalPrice.hashCode());
-        return result;
+        return Objects.hash(bikeList, bookingRange, provider, totalDeposit, totalPrice);
     }
 
     @Override
@@ -68,31 +62,8 @@ public class Quote {
         if (getClass() != obj.getClass())
             return false;
         Quote other = (Quote) obj;
-        if (bikeList == null) {
-            if (other.bikeList != null)
-                return false;
-        } else if (!bikeList.equals(other.bikeList))
-            return false;
-        if (bookingRange == null) {
-            if (other.bookingRange != null)
-                return false;
-        } else if (!bookingRange.equals(other.bookingRange))
-            return false;
-        if (provider == null) {
-            if (other.provider != null)
-                return false;
-        } else if (!provider.equals(other.provider))
-            return false;
-        if (totalDeposit == null) {
-            if (other.totalDeposit != null)
-                return false;
-        } else if (!totalDeposit.stripTrailingZeros().equals(other.totalDeposit.stripTrailingZeros()))
-            return false;
-        if (totalPrice == null) {
-            if (other.totalPrice != null)
-                return false;
-        } else if (!totalPrice.stripTrailingZeros().equals(other.totalPrice.stripTrailingZeros()))
-            return false;
-        return true;
+        return Objects.equals(bikeList, other.bikeList) && Objects.equals(bookingRange, other.bookingRange)
+                && Objects.equals(provider, other.provider) && Objects.equals(totalDeposit, other.totalDeposit)
+                && Objects.equals(totalPrice, other.totalPrice);
     }
 }

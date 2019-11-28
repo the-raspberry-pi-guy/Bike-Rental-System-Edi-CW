@@ -2,13 +2,13 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,9 +17,9 @@ public class BikeProvider {
 	private String storeName;
 	private ContactDetails providerDetails;
 	private Map<String, String> openHours; // Map from day to hour range
-	private ArrayList<BikeProvider> partners;
+	private HashSet<BikeProvider> partners;
 	private Map<BikeType, BigDecimal> typePrice; // Map from Bike Type to BigDecimal price
-	private ArrayList<Bike> providerBikes;
+	private HashSet<Bike> providerBikes;
 	private BigDecimal depositRate;
 	private BookingController bookingController;
 	
@@ -28,11 +28,11 @@ public class BikeProvider {
 		this.providerDetails = providerDetails;
 		this.openHours = openHours;
 		
-		this.partners = new ArrayList<BikeProvider>();
-	    this.providerBikes = new ArrayList<Bike>();
+		this.partners = new HashSet<BikeProvider>();
+	    this.providerBikes = new HashSet<Bike>();
 	    this.typePrice = new HashMap<BikeType, BigDecimal>();
 	    this.depositRate = new BigDecimal("0");
-	    bookingController = new BookingController(this);
+	    this.bookingController = new BookingController();
 	}
 	
 	
@@ -103,7 +103,7 @@ public class BikeProvider {
         return openHours;
     }
 
-    public ArrayList<BikeProvider> getPartners() {
+    public HashSet<BikeProvider> getPartners() {
         return partners;
     }
 
@@ -119,7 +119,7 @@ public class BikeProvider {
     	}
     }
 
-    public ArrayList<Bike> getProviderBikes() {
+    public HashSet<Bike> getProviderBikes() {
         return providerBikes;
     }
 
@@ -139,16 +139,8 @@ public class BikeProvider {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((depositRate == null) ? 0 : depositRate.hashCode());
-        result = prime * result + ((openHours == null) ? 0 : openHours.hashCode());
-        result = prime * result + ((partners == null) ? 0 : partners.hashCode());
-        result = prime * result + ((providerBikes == null) ? 0 : providerBikes.hashCode());
-        result = prime * result + ((providerDetails == null) ? 0 : providerDetails.hashCode());
-        result = prime * result + ((storeName == null) ? 0 : storeName.hashCode());
-        result = prime * result + ((typePrice == null) ? 0 : typePrice.hashCode());
-        return result;
+        return Objects.hash(bookingController, depositRate, openHours, partners, providerBikes, providerDetails,
+                storeName, typePrice);
     }
 
     @Override
@@ -160,42 +152,11 @@ public class BikeProvider {
         if (getClass() != obj.getClass())
             return false;
         BikeProvider other = (BikeProvider) obj;
-        if (depositRate == null) {
-            if (other.depositRate != null)
-                return false;
-        } else if (!depositRate.equals(other.depositRate))
-            return false;
-        if (openHours == null) {
-            if (other.openHours != null)
-                return false;
-        } else if (!openHours.equals(other.openHours))
-            return false;
-        if (partners == null) {
-            if (other.partners != null)
-                return false;
-        } else if (!partners.equals(other.partners))
-            return false;
-        if (providerBikes == null) {
-            if (other.providerBikes != null)
-                return false;
-        } else if (!providerBikes.equals(other.providerBikes))
-            return false;
-        if (providerDetails == null) {
-            if (other.providerDetails != null)
-                return false;
-        } else if (!providerDetails.equals(other.providerDetails))
-            return false;
-        if (storeName == null) {
-            if (other.storeName != null)
-                return false;
-        } else if (!storeName.equals(other.storeName))
-            return false;
-        if (typePrice == null) {
-            if (other.typePrice != null)
-                return false;
-        } else if (!typePrice.equals(other.typePrice))
-            return false;
-        return true;
+        return Objects.equals(bookingController, other.bookingController)
+                && Objects.equals(depositRate, other.depositRate) && Objects.equals(openHours, other.openHours)
+                && Objects.equals(partners, other.partners) && Objects.equals(providerBikes, other.providerBikes)
+                && Objects.equals(providerDetails, other.providerDetails) && Objects.equals(storeName, other.storeName)
+                && Objects.equals(typePrice, other.typePrice);
     }
 
 
