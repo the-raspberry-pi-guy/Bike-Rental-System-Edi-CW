@@ -51,7 +51,6 @@ public class QuoteController {
 		
 		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
 			Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
-			System.out.println(provider + "     " + available + "\n\n");
 			if(available.size() >= chosenType.getValue()) { // If there are enough available bikes, get them, else return null
 				int i = 0; 
 				for(Bike bike:available) { // Get the first n bikes from the provider (where n is the desired number)
@@ -96,15 +95,16 @@ public class QuoteController {
 	}
 
 	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
-		
 		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
 		chosenQuote.getProvider().getBookingList().add(booking);
+		
+		for (Bike bike:chosenQuote.getBikeList()) {
+		    bike.makeUnavailable(chosenQuote.getBookingRange());
+		}
 		return booking;
 	}
 	
 	public HashSet<Quote> getQuoteList(){
 	    return quoteList;
 	}
-
-
 }

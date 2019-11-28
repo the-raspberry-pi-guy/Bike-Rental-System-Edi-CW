@@ -24,7 +24,7 @@ public class Bike implements Deliverable {
 	public Bike(BikeType type, LocalDate date) {
 		this.type = type;
 		this.dateOfPurchase = date;
-		datesBooked = new HashSet<DateRange>();
+		this.datesBooked = new HashSet<DateRange>();
 		this.bikeStatus = Status.IN_STORE;
 		this.bikeId = UUID.randomUUID();
 	}
@@ -37,6 +37,18 @@ public class Bike implements Deliverable {
     	return dateOfPurchase;
     }
     
+    public HashSet<DateRange> getDatesBooked() {
+        return datesBooked;
+    }
+
+    public UUID getBikeId() {
+        return bikeId;
+    }
+
+    public Status getBikeStatus() {
+        return bikeStatus;
+    }
+
     @Override
     public String toString() {
         return "Bike [datesBooked=" + datesBooked + ", type=" + type + ", dateOfPurchase=" + dateOfPurchase + "]";
@@ -44,6 +56,7 @@ public class Bike implements Deliverable {
 
     public Boolean isAvailable(DateRange other) {
         // Tests if any of the dates in a range clash when the bike is not available
+        
         for (DateRange range: datesBooked) {
     		if(range.overlaps(other)) {
     			return false;

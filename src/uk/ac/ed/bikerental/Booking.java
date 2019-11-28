@@ -32,7 +32,6 @@ public class Booking {
 				DeliveryServiceFactory.getDeliveryService().scheduleDelivery(bike, provider.getContactDetails().getLocation(), customer.getCustomerDetails().getLocation(), hireDates.getStart());
 			}
 		}
-		
 	}
 
 	public UUID getOrderNo() {
