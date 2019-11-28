@@ -12,8 +12,6 @@ import java.util.function.BooleanSupplier;
  * for overlap.
  * 
  */
-
-
 public class DateRange {
 	/**
 	 * The start date of the DateRange, in LocalDate format.
@@ -28,10 +26,9 @@ public class DateRange {
     /**
      * The constructor for the DateRange - generates a DateRange object when given a start
      * and end date in the LocalDate format.
-     * @param start
-     * @param end
+     * @param start The start date of the DateRange, in LocalDate format.
+     * @param end The end date of the DateRange, in LocalDate format.
      */
-    
     public DateRange(LocalDate start, LocalDate end) {
         this.start = start;
         this.end = end;
@@ -62,12 +59,12 @@ public class DateRange {
     public String toString() {
         return "DateRange [start=" + start + ", end=" + end + "]";
     }
+    
     /**
      * Converts a DateRange into the number of years between its start and end date, using
      * the Java ChronoUnit type.
      * @return The number of years between a start and end date.
      */
-
     public long toYears() {
         return ChronoUnit.YEARS.between(this.getStart(), this.getEnd());
     }
@@ -77,7 +74,6 @@ public class DateRange {
      * the Java ChronoUnit type.
      * @return The number of months between a start and end date.
      */
-    
     public long toMonths() {
     	return ChronoUnit.MONTHS.between(this.getStart(), this.getEnd());
     }
@@ -87,7 +83,6 @@ public class DateRange {
      * the Java ChronoUnit type.
      * @return The number of days between a start and end date.
      */
-    
     public long toDays() {
         return ChronoUnit.DAYS.between(this.getStart(), this.getEnd());
     }
@@ -95,10 +90,9 @@ public class DateRange {
     /**
      * Compares two DateRange objects and checks for any overlap between them, including
      * cases where the two DateRanges are equal, or have the same start/end date.
-     * @param otherDate
+     * @param otherDate The date to compare to
      * @return A boolean value of whether or not there is overlap between the two DateRanges.
      */
-    
     public Boolean overlaps(DateRange otherDate) {
         if (this.equals(otherDate)) {
             return true;
@@ -112,7 +106,6 @@ public class DateRange {
      * Implements the hashCode method for DateRange, allowing for use in collections.
      * @return A unique hashCode for the DateRange.
      */
-    
     @Override
     public int hashCode() {
         // hashCode method allowing use in collections
@@ -122,10 +115,9 @@ public class DateRange {
     /**
      * Implements the equals method for DateRange, allowing for comparisons between objects.
      * Two DateRange objects are equal if they have the same start and end date.
-     * @param The object to compare to.
+     * @param obj The object to compare to.
      * @return A boolean value of whether or not the two objects are equal.
      */
-    
     @Override
     public boolean equals(Object obj) {
         // equals method for testing equality in tests
@@ -138,6 +130,5 @@ public class DateRange {
         DateRange other = (DateRange) obj;
         return Objects.equals(end, other.end) && Objects.equals(start, other.start);
     }
-    
-    // You can add your own methods here
+
 }

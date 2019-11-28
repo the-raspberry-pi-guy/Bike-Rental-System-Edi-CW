@@ -7,25 +7,17 @@ package uk.ac.ed.bikerental;
  * independent class that can be utilised for many projects.
  * 	
  */
-
 public class Location {
-	/**
-	 * The postcode of the location.
-	 */
+
     private String postcode;
-    
-    /**
-     * The address of the location;
-     */
     private String address;
     
     /**
      * Creates a new location object with the given postcode and address, and will
      * catch any postcodes that are more than 6 characters.
-     * @param postcode
-     * @param address
+     * @param postcode The postcode of the location
+     * @param address The address of the location
      */
-    
     public Location(String postcode, String address) {
         assert postcode.length() >= 6; // Catches postcodes that are not complete
         this.postcode = postcode;
@@ -39,7 +31,6 @@ public class Location {
      * @param other The location we are comparing to. 
      * @return A boolean value of whether or not the locations are nearby each other.
      */
-    
     public boolean isNearTo(Location other) {
         if(this.postcode.substring(0, 2).equals(other.postcode.substring(0, 2))) {
             return true;
@@ -50,18 +41,16 @@ public class Location {
 
     /**
      * Returns the postcode of the location object.
-     * @return The postcode of the address.
+     * @return The postcode of the location.
      */
-    
     public String getPostcode() {
         return postcode;
     }
     
     /**
      * Returns the address of the location object.
-     * @return The address of the address.
+     * @return The address of the location.
      */
-
     public String getAddress() {
         return address;
     }
@@ -71,7 +60,6 @@ public class Location {
      * purposes, or for displaying a location in a simple format.
      * @return A string displaying the properties of the location object.
      */
-    
     @Override
     public String toString() {
         return "Location [postcode=" + postcode + ", address=" + address + "]";
@@ -82,7 +70,6 @@ public class Location {
      * data types that rely on this function.
      * @return A unique hashcode for the object.
      */
-    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -91,15 +78,13 @@ public class Location {
         result = prime * result + ((postcode == null) ? 0 : postcode.hashCode());
         return result;
     }
-    
     /**
      * Implements the equals function for locations, allowing for direct comparisons
      * between two location objects. Two locations are equal if they have the same
      * address and postcode.
-     * @param The object to compare to.
+     * @param obj The object to compare to.
      * @return A boolean value of whether or not the two objects are equal.
      */
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
