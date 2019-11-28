@@ -55,10 +55,19 @@ public class Bike implements Deliverable {
     public void makeUnavailable(DateRange range) {
     	datesBooked.add(range);
     }
+    
+    public boolean compareType(Bike other) {
+        if (this.type == other.getType()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bikeStatus, dateOfPurchase, datesBooked, type);
+        return Objects.hash(bikeId, bikeStatus, dateOfPurchase, datesBooked, type);
     }
 
     @Override
@@ -70,7 +79,7 @@ public class Bike implements Deliverable {
         if (getClass() != obj.getClass())
             return false;
         Bike other = (Bike) obj;
-        return bikeStatus == other.bikeStatus
+        return Objects.equals(bikeId, other.bikeId) && bikeStatus == other.bikeStatus
                 && Objects.equals(dateOfPurchase, other.dateOfPurchase)
                 && Objects.equals(datesBooked, other.datesBooked) && Objects.equals(type, other.type);
     }

@@ -6,15 +6,15 @@ import java.util.UUID;
 
 public class Booking {
 
-	private UUID orderNo;
-	private DateRange hireDates;
-	private boolean requiresDelivery;
-	private BigDecimal totalPrice;
-	private BigDecimal depositAmount;
-	private boolean depositPaid;
-	private BikeProvider hireProvider;
-	private HashSet<Bike> bikeList;
-	private Customer customer;
+	private final UUID orderNo;
+	private final DateRange hireDates;
+	private final boolean requiresDelivery;
+	private final BigDecimal totalPrice;
+	private final BigDecimal depositAmount;
+	private final boolean depositPaid;
+	private final BikeProvider hireProvider;
+	private final HashSet<Bike> bikeList;
+	private final Customer customer;
 
 	public Booking(DateRange hireDates, boolean requiresDelivery, BigDecimal totalPrice, BigDecimal depositAmount, HashSet<Bike> bikeList, BikeProvider provider, Customer customer) {
 		this.hireDates = hireDates;

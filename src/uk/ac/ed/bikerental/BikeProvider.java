@@ -130,6 +130,7 @@ public class BikeProvider {
 				bikes.add(bike);
 			}
 		}
+		System.out.println(bikes);
 		return bikes;
 	}
 	

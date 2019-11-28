@@ -25,7 +25,7 @@ public class NEATSystemTests {
     private BikeType street;
     private BikeType bmx;
     private BikeType mountain;
-    private QuoteController controller;
+    private QuoteController quoteController;
     private HashSet<BikeProvider> scottishBikeProviders;
 
     @BeforeAll
@@ -108,12 +108,12 @@ public class NEATSystemTests {
         glasgowProvider1.setDepositRate(new BigDecimal("40"));
         
         // Setup Quote Controller
-        this.controller = new QuoteController();
-
+        this.quoteController = new QuoteController();
         
         // Add all of the providers to a list of providers in Scotland
         this.scottishBikeProviders =
-                new HashSet<BikeProvider>(Arrays.asList(ediProvider1, ediProvider2, ediProvider3, glasgowProvider1));
+                new HashSet<BikeProvider>
+        (Arrays.asList(ediProvider1, ediProvider2, ediProvider3, glasgowProvider1));
     
     }
     
@@ -138,10 +138,26 @@ public class NEATSystemTests {
         expected.add(new Quote(desiredDates, ediProvider3, returnedExpectedBikes, new BigDecimal("1000"), new BigDecimal("300")));
         
         // Get quotes in Edinburgh between 10th Nov and 20th Nov 2019, in EH postcodes
-        Set<Quote> result = controller.getQuotes(desiredDates, scottishBikeProviders, 
+        
+        System.out.println("1: " + ediProvider1.getProviderBikes().toString() + "2: " + ediProvider2.getProviderBikes().toString() + "3: " + ediProvider3.getProviderBikes().toString());
+        
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
                 bikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
         
-        assertEquals(expected, result);
+        HashMap<BikeType, Integer> resultBikes = new HashMap();
+        
+        for (Quote quote:result) {
+            resultBikes.clear();
+            HashSet<Bike> bikesInQuote = quote.getBikeList();
+            for (Bike bike:bikesInQuote) {
+                if(resultBikes.containsKey(bike.getType())) {
+                    resultBikes.replace(bike.getType(), resultBikes.get(bike.getType()) + 1);
+                } else {
+                    resultBikes.put(bike.getType(), 1);
+                }
+            }
+            assertEquals(bikes, resultBikes);
+        }
     }
     
     @Test
@@ -153,7 +169,7 @@ public class NEATSystemTests {
         HashSet<Quote> expected = new HashSet<Quote>();
 
         HashSet<Bike> returnedExpectedBikes = new HashSet<Bike>();
-        returnedExpectedBikes.add(new Bike(bmx, LocalDate.of(2009, 2, 21)));
+        returnedExpectedBikes.add(new Bike(bmx, null));
         
         expected.add(new Quote(desiredDates, glasgowProvider1, returnedExpectedBikes, new BigDecimal("80"), new BigDecimal("32")));
         ////
@@ -162,8 +178,7 @@ public class NEATSystemTests {
         HashSet<Bike> resultBikes = new HashSet<Bike>();
         resultBikes.add(new Bike(bmx, LocalDate.of(2009, 2, 21)));
         
-        result.add(new Quote(desiredDates, glasgowProvider1, resultBikes, new BigDecimal("80"), new BigDecimal("32")));
-        
+        result.add(new Quote(desiredDates, glasgowProvider1, resultBikes, new BigDecimal("80"), new BigDecimal("32")));     
     
         assertEquals(expected, result);
 
