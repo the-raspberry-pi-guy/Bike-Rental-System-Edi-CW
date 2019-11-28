@@ -240,10 +240,13 @@ public class NEATSystemTests {
             }
         }
         
+        // Checks that the new booking matches the selected quote, and that a UUID order number has been
+        // generated and is not null.
         assertTrue((newBooking.getHireDates() == desiredDates) && (newBooking.isRequiresDelivery() == false)
                 && (newBooking.getCustomer() == testCustomer) && (newBooking.getHireProvider() == ediProvider3)
                 && (newBooking.getTotalPrice() == selectedQuote.getTotalPrice()) 
                 && (newBooking.getDepositAmount() == selectedQuote.getTotalDeposit())
-                && (newBooking.getBikeList() == selectedQuote.getBikeList()));
+                && (newBooking.getBikeList() == selectedQuote.getBikeList())
+                && (newBooking.getOrderNo() != null));
     }
 }
