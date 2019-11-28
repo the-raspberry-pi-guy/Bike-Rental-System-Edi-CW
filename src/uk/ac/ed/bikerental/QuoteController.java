@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class QuoteController {
+    Customer customerOwner;
 	
 	private HashSet<Quote> quoteList;
 
@@ -17,8 +18,9 @@ public class QuoteController {
         return "QuoteController [quoteList=" + quoteList + "]";
     }
 
-    public QuoteController() {
+    public QuoteController(Customer owner) {
 		quoteList = new HashSet<Quote>();
+		this.customerOwner = owner;
 	}
 
 	public Set<Quote> getQuotes(DateRange dates, HashSet<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location) {

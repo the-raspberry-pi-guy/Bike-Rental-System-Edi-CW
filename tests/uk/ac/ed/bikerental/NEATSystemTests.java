@@ -108,7 +108,7 @@ public class NEATSystemTests {
         glasgowProvider1.setDepositRate(new BigDecimal("40"));
         
         // Setup Quote Controller
-        this.quoteController = new QuoteController();
+        this.quoteController = new QuoteController(testCustomer);
         
         // Add all of the providers to a list of providers in Scotland
         this.scottishBikeProviders =
@@ -144,7 +144,7 @@ public class NEATSystemTests {
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
                 bikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
         
-        HashMap<BikeType, Integer> resultBikes = new HashMap();
+        HashMap<BikeType, Integer> resultBikes = new HashMap<BikeType, Integer>();
         
         for (Quote quote:result) {
             resultBikes.clear();
@@ -158,29 +158,5 @@ public class NEATSystemTests {
             }
             assertEquals(bikes, resultBikes);
         }
-    }
-    
-    @Test
-    void singleReturn() {
-        Map<BikeType, Integer> bike = new HashMap<>();
-        bike.put(bmx, 1);
-        
-        DateRange desiredDates = new DateRange(LocalDate.of(2019, 10, 10), LocalDate.of(2019, 10, 20));
-        HashSet<Quote> expected = new HashSet<Quote>();
-
-        HashSet<Bike> returnedExpectedBikes = new HashSet<Bike>();
-        returnedExpectedBikes.add(new Bike(bmx, null));
-        
-        expected.add(new Quote(desiredDates, glasgowProvider1, returnedExpectedBikes, new BigDecimal("80"), new BigDecimal("32")));
-        ////
-        HashSet<Quote> result = new HashSet<Quote>();
-
-        HashSet<Bike> resultBikes = new HashSet<Bike>();
-        resultBikes.add(new Bike(bmx, LocalDate.of(2009, 2, 21)));
-        
-        result.add(new Quote(desiredDates, glasgowProvider1, resultBikes, new BigDecimal("80"), new BigDecimal("32")));     
-    
-        assertEquals(expected, result);
-
     }
 }
