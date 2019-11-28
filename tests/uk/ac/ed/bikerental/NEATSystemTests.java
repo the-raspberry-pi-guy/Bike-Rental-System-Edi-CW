@@ -117,8 +117,10 @@ public class NEATSystemTests {
     
     }
     
+    /// TEST 1 & TEST 2 DEMONSTRATE THE FUNCTIONALITY OF THE SYSTEM IN USE-CASE 1
+    
     @Test
-    @DisplayName("Test a bike query with all bikes available")
+    @DisplayName("TEST 1: Test a bike query with all bikes available")
     // Tests whether right stores will provide quotes (based on location and number of bikes in store)
     void findingQuoteNoUnavailTest() {
         // Setup the query and add the bikes and desired quantities
@@ -156,7 +158,7 @@ public class NEATSystemTests {
     }
     
     @Test
-    @DisplayName("Test a bike query where some bikes are already booked")
+    @DisplayName("TEST 2: Test a bike query where some bikes are already booked")
     // Tests whether right stores will provide quotes (based on location, number of bikes in store and whether bikes booked or not)
     void findingQuoteWUnavailTest() {
         // Setup the query and add the bikes and desired quantities
@@ -166,12 +168,16 @@ public class NEATSystemTests {
         desiredBikes.put(street, 2);
         
         // Make bikes in EdiProvider3 unavailable by creating a previous booking
-        DateRange bookingDates = new DateRange(LocalDate.of(2019, 12, 1), LocalDate.of(2019,12,8));
-        HashSet<Bike> bikesToMakeUnavail = new HashSet<Bike>();
-        bikesToMakeUnavail.add(new Bike(street, null));
-        bikesToMakeUnavail.add(new Bike(street, null)); // Remove both bikes from EdiProvider 3
-        Quote prevQuote = new Quote(bookingDates, ediProvider3, bikesToMakeUnavail, new BigDecimal("720"), new BigDecimal("216"));
-        quoteController.bookQuote(prevQuote, testCustomer, false);
+        DateRange prevBookingDates = new DateRange(LocalDate.of(2019, 12, 1), LocalDate.of(2019,12,8));
+        HashMap <BikeType, Integer> bikesToMakeUnavail = new HashMap<>(); // Remove both bikes from EdiProvider 3
+        bikesToMakeUnavail.put(street, 2);
+        Set<Quote> prevResult = quoteController.getQuotes(prevBookingDates, scottishBikeProviders, 
+                bikesToMakeUnavail, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+        for (Quote quote:prevResult) {
+            if (quote.getProvider() == ediProvider3) {
+                quoteController.bookQuote(quote, testCustomer, false);
+            }
+        }
         
         // Get quotes in Edinburgh between 5th Dec and 7th Dec 2019, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 12, 5), LocalDate.of(2019, 12, 7));     
@@ -203,4 +209,6 @@ public class NEATSystemTests {
             } 
         }
     }
+    
+    /// TEST 2 IS FOR USE-CASE 2
 }
