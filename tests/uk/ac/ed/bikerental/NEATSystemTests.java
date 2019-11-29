@@ -158,7 +158,7 @@ public class NEATSystemTests {
                 assertEquals(desiredBikes, resultBikes);
             } 
         }
-    }
+    } 
     
     @Test
     @DisplayName("TEST 2: Test a bike query where some bikes are already booked. EXCLUDES non-nearby providers "
@@ -167,7 +167,8 @@ public class NEATSystemTests {
     // Creates a previous booking in the system and then test that bikes at that store are excluded within that date range.
     void findingQuoteWUnavailTest() {
 
-        // Make bikes in EdiProvider3 unavailable by creating a previous booking
+        // Make bikes in EdiProvider3 unavailable by creating a previous booking between
+        // 1st Dec to the 8th Dec
         DateRange prevBookingDates = new DateRange(LocalDate.of(2019, 12, 1), LocalDate.of(2019,12,8));
         HashMap <BikeType, Integer> bikesToMakeUnavail = new HashMap<>(); // Remove both bikes from EdiProvider 3
         bikesToMakeUnavail.put(street, 2);
@@ -179,9 +180,11 @@ public class NEATSystemTests {
         for (Quote quote:prevResult) {
             if (quote.getProvider() == ediProvider3) { // Book the bikes for ediProvider3
                 quoteController.bookQuote(quote, testCustomer, false);
+                System.out.println("BOOKED");
             }
         }
-        System.out.println("YO");
+        
+
         // Setup the query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
         // Would like 1 BMX bike, 2 street bikes
@@ -190,15 +193,14 @@ public class NEATSystemTests {
         
         // Get quotes in Edinburgh between 5th Dec and 7th Dec 2019, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 12, 5), LocalDate.of(2019, 12, 7)); 
-
-        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, location);
         
-        HashMap<BikeType, Integer> resultBikes = new HashMap<BikeType, Integer>();
-
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, desiredBikes, location);
+        
         // Loops through the returned bikes in each quote, counts how many there are of each type
         // This is then checked against the original query, and equality is asserted
         // Should only return EdiProvider2
+        HashMap<BikeType, Integer> resultBikes = new HashMap<BikeType, Integer>();
+        
         for (Quote quote:result) {
             if (quote.getProvider() != ediProvider2) {
                 assertTrue(false);
@@ -211,13 +213,12 @@ public class NEATSystemTests {
                         resultBikes.replace(bike.getType(), resultBikes.get(bike.getType()) + 1);
                     } else {
                         resultBikes.put(bike.getType(), 1);
-                        break;
                     }
                 }
                 assertEquals(desiredBikes, resultBikes);
             } 
         }
-    }
+    } 
     
     /// TEST 3, TEST 4 & TEST 5 ARE FOR DEMONSTRATING THE FUNCTIONALITY IN USE CASE 2
     /// Booking a Quote with/without delivery service and checking that the returned booking object matches
@@ -260,7 +261,7 @@ public class NEATSystemTests {
                 && (newBooking.getOrderNo() != null));
     }
     
- /*   @Test
+    @Test
     @DisplayName("TEST 4: Create booking from quote & checks that the Booking's delivery is scheduled"
             + " using the DeliveryService")
     // Gathers quotes and then creates a unique booking for a customer's desired store
@@ -290,9 +291,9 @@ public class NEATSystemTests {
         MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
         assertEquals(newBooking, deliveryService.getPickupsOn(desiredDates.getStart()));
         
-    } */
+    } 
     
-    @Test
+ /*   @Test
     @DisplayName("TEST 5: Creates 2 bookings and verifies that these are recorded in *that Provider's* BookingController")
     // Gathers quotes and then creates a unique booking for a customer's desired store *2
     // Test checks that the created bookings are present in the BookingController class
@@ -336,5 +337,5 @@ public class NEATSystemTests {
         }
         
         
-    }
+    } */
 }

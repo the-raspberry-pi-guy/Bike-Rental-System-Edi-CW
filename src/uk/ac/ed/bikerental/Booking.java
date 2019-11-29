@@ -25,7 +25,7 @@ public class Booking implements Deliverable{
         UNCOMPLETE, // When booking has been made and bikes are not in the store
         IN_TRANSIT_TO_CUSTOMER, // On its way to the customer
         IN_TRANSIT_TO_STORE, // Coming back from customer
-        CURRENTLY_ACTIVE, // To be set to this when bikes are delivered
+        BIKES_WITH_CUSTOMER, // To be set to this when bikes are delivered
         COMPLETE // When the bikes have been returned
     }
 
@@ -56,7 +56,7 @@ public class Booking implements Deliverable{
         // Change the status of the booking
         if (bookingStatus == Booking.Status.UNCOMPLETE) {
             bookingStatus = Booking.Status.IN_TRANSIT_TO_CUSTOMER;
-        } else if (bookingStatus == Booking.Status.CURRENTLY_ACTIVE) {
+        } else if (bookingStatus == Booking.Status.BIKES_WITH_CUSTOMER) {
             bookingStatus = Booking.Status.IN_TRANSIT_TO_STORE;
         }
         
@@ -75,7 +75,7 @@ public class Booking implements Deliverable{
         
         // Change the status of the booking
         if (bookingStatus == Booking.Status.IN_TRANSIT_TO_CUSTOMER) {
-            bookingStatus = Booking.Status.CURRENTLY_ACTIVE;
+            bookingStatus = Booking.Status.BIKES_WITH_CUSTOMER;
         } else if (bookingStatus == Booking.Status.IN_TRANSIT_TO_STORE) {
             bookingStatus = Booking.Status.COMPLETE;
         }

@@ -74,18 +74,18 @@ public class BikeProvider {
 	    partners.remove(otherProvider);
 	}
 	
-/*	public void recordBikeReturn(UUID orderNo) {
+	public void recordBikeReturn(UUID orderNo) {
 	    for(Booking booking: bookingController.getBookingList()) {
 	    	if(booking.getOrderNo().equals(orderNo)) {
 	    		for(Bike bike: booking.getBikeList()) {
-	    			bike.onDropoff();
+	    			//bike.onDropoff();
 	    			if(booking.getHireProvider() != this) {
 	    				notifyOriginalProvider(orderNo);
 	    			}
 	    		}
 	    	}
 	    }
-	} */
+	} 
 	
 	public void notifyOriginalProvider(UUID orderNo) {
 	    System.out.println("The bikes from order " + orderNo.toString() + " have been returned to a partner store.");
@@ -125,6 +125,7 @@ public class BikeProvider {
 
     public Set<Bike> getAvailableForType(BikeType type, DateRange dates) {
 		Set<Bike> bikes = new HashSet<Bike>();
+
 		for(Bike bike: providerBikes) {
 			if(bike.getType() == type && bike.isAvailable(dates)) {
 				bikes.add(bike);
@@ -139,8 +140,7 @@ public class BikeProvider {
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookingController, depositRate, openHours, partners, providerBikes, providerDetails,
-                storeName, typePrice);
+        return Objects.hash(providerDetails, storeName);
     }
 
     @Override
