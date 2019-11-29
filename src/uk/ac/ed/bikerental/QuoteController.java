@@ -27,9 +27,16 @@ public class QuoteController {
         this.customerOwner = owner;
     }
 
-    public Set<Quote> getQuotes(DateRange dates, HashSet<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location, PricingPolicy pricingPolicy, ValuationPolicy valuationPolicy) {
+    // Returns a set of matching quotes for a query, with a given pricing policy and valuation policy
+    public Set<Quote> getQuotes(DateRange dates, HashSet<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location, 
+            PricingPolicy pricingPolicy, ValuationPolicy valuationPolicy) {
+        
         HashSet<Quote> resultListQuotes = new HashSet<Quote>();
+        
+        // Get the nearby providers
         Collection<BikeProvider> nearbyProviders = getNearbyProviders(allBikeProviders, location);
+        
+        // For each bike provider in the nearby providers, get the appropriate quotes and then return them
         for(BikeProvider provider:nearbyProviders) {
             Quote result = getQuoteForProvider(dates, provider, bikes, pricingPolicy, valuationPolicy);
             if(result != null) {
@@ -83,21 +90,16 @@ public class QuoteController {
         for(Bike bike: bikes){
         	if((valuationPolicy instanceof LinearDepreciation) || (valuationPolicy instanceof DoubleDecliningBalanceDepreciation)) {
         		bike.setFluidValue(valuationPolicy.calculateValue(bike, LocalDate.now()));
-        		provider.setTypePrice(bike.getType(), bike.getFluidValue());
+                totalPrice.add(bike.getFluidValue()).multiply(new BigDecimal(dates.toDays()));
         	}
-            BigDecimal dailyPrice = provider.getDailyPrice(bike.getType());
-            if(dailyPrice == null) { // Meant to return null if a daily price has not been set
-                System.out.println(String.format("No daily price for bikeType %s from provider %s", bike.getType(),provider.getStoreName()));
-                return null;
+        	else {
+                BigDecimal dailyPrice = provider.getDailyPrice(bike.getType());
+                if(dailyPrice == null) { // Meant to return null if a daily price has not been set
+                    System.out.println(String.format("No daily price for bikeType %s from provider %s", bike.getType(),provider.getStoreName()));
+                    return null;
+                }
+                totalPrice.add(dailyPrice.multiply(new BigDecimal(dates.toDays())));
             }
-        }
-        
-        if(pricingPolicy instanceof MultidayDiscountPolicy) {
-        	totalPrice = pricingPolicy.calculatePrice(bikes, dates);
-        } else {
-        	for(Bike bike: bikes) {
-        		totalPrice.add(provider.getDailyPrice(bike.getType()).multiply(new BigDecimal(dates.toDays())));
-        	}
         }
         
         return totalPrice;
