@@ -80,19 +80,20 @@ public class QuoteController {
         if(totalPrice == null) {
             return null;
         }
-        BigDecimal totalDeposit = getDeposit(bikeList, provider);
+        BigDecimal totalDeposit = getDeposit(bikeList, provider, dates, valuationPolicy);
         Quote quote = new Quote(dates, provider, bikeList, totalPrice, totalDeposit);
         return quote;
     }
 
+	/*
+	 * getTotalPrice is used to get the total price of a quote, potentially utilising a pricing policy if
+	 * once is passed in. If not, it will use the default method. It will always return a BigDecimal
+	 * value as long as the daily price is set for the provider, else it will return null.
+	 */
+	
     private BigDecimal getTotalPrice(Set<Bike> bikes, BikeProvider provider, DateRange dates, ValuationPolicy valuationPolicy, PricingPolicy pricingPolicy) {
         BigDecimal totalPrice = new BigDecimal("0");
         for(Bike bike: bikes){
-        	if((valuationPolicy instanceof LinearDepreciation) || (valuationPolicy instanceof DoubleDecliningBalanceDepreciation)) {
-        		bike.setFluidValue(valuationPolicy.calculateValue(bike, LocalDate.now()));
-                totalPrice.add(bike.getFluidValue()).multiply(new BigDecimal(dates.toDays()));
-        	}
-        	else {
                 BigDecimal dailyPrice = provider.getDailyPrice(bike.getType());
                 if(dailyPrice == null) { // Meant to return null if a daily price has not been set
                     System.out.println(String.format("No daily price for bikeType %s from provider %s", bike.getType(),provider.getStoreName()));
@@ -100,22 +101,30 @@ public class QuoteController {
                 }
                 BigDecimal days = new BigDecimal(dates.toDays());
                 totalPrice = totalPrice.add(dailyPrice.multiply(days));
-            }
         }
-        
+        // We check for a multiday discount policy here and implement the discount if needed
         if(pricingPolicy instanceof MultidayDiscountPolicy) {
-        	totalPrice.multiply(pricingPolicy.calculatePrice(bikes, dates));
+        	totalPrice = totalPrice.multiply(pricingPolicy.calculatePrice(bikes, dates));
         }
         
+        totalPrice.stripTrailingZeros();
         return totalPrice;
     }
     
     // Calculates the deposit given a total price and a bike provider
-    private BigDecimal getDeposit(Set<Bike> bikes, BikeProvider provider) {
+    // Implements the valuation policies if one is passed in.
+    private BigDecimal getDeposit(Set<Bike> bikes, BikeProvider provider, DateRange dates, ValuationPolicy valuationPolicy) {
     	BigDecimal totalDeposit = new BigDecimal(0);
-    	
+    	BigDecimal replacementValue = new BigDecimal(0);
     	for(Bike bike: bikes) {
-    		BigDecimal replacementValue = bike.getType().getReplacementValue();
+    		// Check for a valuation policy, and apply its calculateValue method if neccessary
+        	if((valuationPolicy instanceof LinearDepreciation) || (valuationPolicy instanceof DoubleDecliningBalanceDepreciation)) {
+        		bike.setFluidValue(valuationPolicy.calculateValue(bike, LocalDate.now()));
+        		replacementValue = bike.getFluidValue();
+        	} else {
+        		replacementValue = bike.getType().getReplacementValue();
+        	}
+    		
     		BigDecimal percent = provider.getDepositRate().divide(new BigDecimal(100));
     		totalDeposit = totalDeposit.add(replacementValue.multiply(percent));
     	}
