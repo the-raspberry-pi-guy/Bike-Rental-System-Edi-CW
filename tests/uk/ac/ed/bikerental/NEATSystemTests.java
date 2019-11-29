@@ -235,6 +235,7 @@ public class NEATSystemTests {
         HashMap<BikeType, Integer> resultBikes = new HashMap<BikeType, Integer>();
         
         for (Quote quote:result) {
+            System.out.println(quote);
             if (quote.getProvider() != ediProvider2) {
                 assertTrue(false);
             }
@@ -331,7 +332,7 @@ public class NEATSystemTests {
     
     @Test
     @DisplayName("TEST 6: Creates 2 bookings and verifies that these are recorded in *that Provider's* BookingController")
-    // Gathers quotes and then creates a unique booking for a customer's desired store *2
+    // Gathers quotes and then creates a unique booking for a customer's desired store, twice
     // Test checks that the created bookings are present in the BookingController class
     void quoteBookingsCaptureTest() {
         /// FIRST QUOTE AND BOOKING: 1 MTB AND 1 STREET BIKE FROM EDIPROVIDER3
@@ -346,30 +347,64 @@ public class NEATSystemTests {
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
                 desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"));
         
-        Booking newBooking = null;
+        Booking firstBooking = null;
         // Choose ediProvider3 to fulfill the order, and set to not requiring delivery
         for (Quote quote:result) {
             if (quote.getProvider() == ediProvider3) {
-                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+                firstBooking = quoteController.bookQuote(quote, testCustomer, false);
             }
         }
         
-        /// SECOND QUOTE AND BOOKING: 1 BMX BIKE FROM GLASGOWPROVIDER1
-        // Setup the first query and add the bikes and desired quantities
+        /// SECOND QUOTE AND BOOKING: 2 STREET BIKES FROM EDIPROVIDER3
+        // Setup the second query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes2 = new HashMap<>();
-        // Would like 1 BMX bike
-        desiredBikes2.put(bmx, 1);
+        // Would like 2 street bikes
+        desiredBikes2.put(street, 2);
         
         // Get quotes in Edinburgh between 12th June 2020 and 18th July 2020, in Glasgow postcodes
         DateRange desiredDates2 = new DateRange(LocalDate.of(2020, 6, 12), LocalDate.of(2020, 7, 18));     
         Set<Quote> result2 = quoteController.getQuotes(desiredDates2, scottishBikeProviders, 
-                desiredBikes, new Location("G2 EXY7", "Chris Hadfield Street, Glasgow"));
+                desiredBikes, new Location("EH8 9NP", "Chris Hadfield Street, Glasgow"));
         
-        // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
+        Booking secondBooking = null;
+        // Choose ediProvider3 to fulfill the order, and set to not requiring delivery
         for (Quote quote:result2) {
-            if (quote.getProvider() == glasgowProvider1) {
-                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+            if (quote.getProvider() == ediProvider3) {
+                secondBooking = quoteController.bookQuote(quote, testCustomer, false);
             }
         }
+        
+        Set<Booking> ediProvider3Bookings = ediProvider3.getBookingList();
+        
+        // Check whether the BookingController of ediProvider3 contains the 2 bookings made with that Provider
+        assertTrue(ediProvider3Bookings.contains(firstBooking) && ediProvider3Bookings.contains(secondBooking));
+    }
+    
+    /// FOLLOWING TESTS DEMONSTRATE THE FUNCTIONALITY OF THE RETURNING BIKE USE-CASE
+    
+    @Test
+    @DisplayName("TEST 7: Test returning bikes to original store, checks status change")
+    // Makes a booking that the customer then returns to original store
+    // Ensures that the necessary steps are undertaken to change bike status
+    void returnBikeToOriginalProviderTest() {
+        // Setup the first query and add the bikes and desired quantities
+        Map<BikeType, Integer> desiredBikes = new HashMap<>();
+        // Would like 2 Street bikes
+        desiredBikes.put(street, 2);
+        
+        // Get quotes in Glasgow between 20th May 2020 and 24th May 2020, in G2 postcodes
+        DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 20), LocalDate.of(2020, 5, 24));     
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
+                desiredBikes, new Location("G2 EXTY", "Yuri Avenue, Glasgow"));
+        
+        Booking glasgowBooking = null;
+        // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
+        for (Quote quote:result) {
+            if (quote.getProvider() == glasgowProvider1) {
+                glasgowBooking = quoteController.bookQuote(quote, testCustomer, false);
+            }
+        }
+        
+        
     }
 }
