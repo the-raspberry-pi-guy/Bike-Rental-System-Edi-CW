@@ -41,10 +41,10 @@ public class NEATSystemTests {
         
         // Setup for all use cases
         
-        // New customer, with name, location and number. Wishes for details to be deleted after booking (true delete flag)
+        // New customer, with name, location and number, false delete flag
         this.testCustomer = new Customer("Matt", "Timmons-Brown", 
                 new ContactDetails(new Location("EH4 9EF", "Edinburgh University, Crichton Street"), "07975558134"),
-                true);
+                false);
         
         // Populate some test providers with name, contact information and an (empty as not necessary) HashMap representing opening hours
         this.ediProvider1 = new BikeProvider("Edinburgh Provider 1",
