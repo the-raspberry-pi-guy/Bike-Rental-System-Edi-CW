@@ -74,7 +74,7 @@ public class BikeProvider {
 	    partners.remove(otherProvider);
 	}
 	
-	public void recordBikeReturn(UUID orderNo) {
+/*	public void recordBikeReturn(UUID orderNo) {
 	    for(Booking booking: bookingController.getBookingList()) {
 	    	if(booking.getOrderNo().equals(orderNo)) {
 	    		for(Bike bike: booking.getBikeList()) {
@@ -85,7 +85,7 @@ public class BikeProvider {
 	    		}
 	    	}
 	    }
-	}
+	} */
 	
 	public void notifyOriginalProvider(UUID orderNo) {
 	    System.out.println("The bikes from order " + orderNo.toString() + " have been returned to a partner store.");

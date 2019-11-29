@@ -37,15 +37,16 @@ public class NEATSystemTests {
     void setUp() throws Exception {
         // Setup mock delivery service before each tests
         DeliveryServiceFactory.setupMockDeliveryService();
+        DeliveryService mock = DeliveryServiceFactory.getDeliveryService();
         
-        // Setup for use-case 1: Finding a quote
+        // Setup for all use cases
         
         // New customer, with name, location and number. Wishes for details to be deleted after booking (true delete flag)
         this.testCustomer = new Customer("Matt", "Timmons-Brown", 
                 new ContactDetails(new Location("EH4 9EF", "Edinburgh University, Crichton Street"), "07975558134"),
                 true);
         
-        // Populate some test providers with name, contact information and an (empty) hashmap representing opening hours
+        // Populate some test providers with name, contact information and an (empty as not necessary) HashMap representing opening hours
         this.ediProvider1 = new BikeProvider("Edinburgh Provider 1",
                 new ContactDetails(new Location("EH1 1BR", "123 Test Street"), "01341675432"), new HashMap<String, String>());
         this.ediProvider2 = new BikeProvider("Edinburgh Provider 2",
@@ -111,13 +112,13 @@ public class NEATSystemTests {
         this.quoteController = new QuoteController(testCustomer);
         
         // Add all of the providers to a list of providers in Scotland
-        this.scottishBikeProviders =
-                new HashSet<BikeProvider>
-        (Arrays.asList(ediProvider1, ediProvider2, ediProvider3, glasgowProvider1));
+        this.scottishBikeProviders = new HashSet<BikeProvider>(Arrays.asList
+                (ediProvider1, ediProvider2, ediProvider3, glasgowProvider1));
     
     }
     
     /// TEST 1 & TEST 2 DEMONSTRATE THE FUNCTIONALITY OF THE SYSTEM IN USE-CASE 1
+    /// Finding a quote, excluding non-nearby providers and bikes that are unavailable in a given range
     
     @Test
     @DisplayName("TEST 1: Test a bike query with all bikes available. EXCLUDES "
@@ -165,18 +166,22 @@ public class NEATSystemTests {
     // Tests whether right stores will provide quotes (based on location, number of bikes in store and whether bikes booked or not)
     // Creates a previous booking in the system and then test that bikes at that store are excluded within that date range.
     void findingQuoteWUnavailTest() {
+
         // Make bikes in EdiProvider3 unavailable by creating a previous booking
         DateRange prevBookingDates = new DateRange(LocalDate.of(2019, 12, 1), LocalDate.of(2019,12,8));
         HashMap <BikeType, Integer> bikesToMakeUnavail = new HashMap<>(); // Remove both bikes from EdiProvider 3
         bikesToMakeUnavail.put(street, 2);
+        Location location = new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh");
+        
         Set<Quote> prevResult = quoteController.getQuotes(prevBookingDates, scottishBikeProviders, 
-                bikesToMakeUnavail, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+                bikesToMakeUnavail, location);
+        
         for (Quote quote:prevResult) {
             if (quote.getProvider() == ediProvider3) { // Book the bikes for ediProvider3
                 quoteController.bookQuote(quote, testCustomer, false);
             }
         }
-        
+        System.out.println("YO");
         // Setup the query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
         // Would like 1 BMX bike, 2 street bikes
@@ -184,12 +189,13 @@ public class NEATSystemTests {
         desiredBikes.put(street, 2);
         
         // Get quotes in Edinburgh between 5th Dec and 7th Dec 2019, in EH postcodes
-        DateRange desiredDates = new DateRange(LocalDate.of(2019, 12, 5), LocalDate.of(2019, 12, 7));     
+        DateRange desiredDates = new DateRange(LocalDate.of(2019, 12, 5), LocalDate.of(2019, 12, 7)); 
+
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+                desiredBikes, location);
         
         HashMap<BikeType, Integer> resultBikes = new HashMap<BikeType, Integer>();
-                
+
         // Loops through the returned bikes in each quote, counts how many there are of each type
         // This is then checked against the original query, and equality is asserted
         // Should only return EdiProvider2
@@ -205,6 +211,7 @@ public class NEATSystemTests {
                         resultBikes.replace(bike.getType(), resultBikes.get(bike.getType()) + 1);
                     } else {
                         resultBikes.put(bike.getType(), 1);
+                        break;
                     }
                 }
                 assertEquals(desiredBikes, resultBikes);
@@ -212,13 +219,16 @@ public class NEATSystemTests {
         }
     }
     
-    /// TEST 3 IS FOR USE-CASE 2
+    /// TEST 3, TEST 4 & TEST 5 ARE FOR DEMONSTRATING THE FUNCTIONALITY IN USE CASE 2
+    /// Booking a Quote with/without delivery service and checking that the returned booking object matches
+    /// Also testing that the Booking objects are captured in our system-level BookingController class
     
     @Test
-    @DisplayName("TEST 3: Creates a booking for a quote picked from an arbitrary returned store & validates booking against quote")
+    @DisplayName("TEST 3: Creates a booking for a quote picked from an arbitrary returned store "
+            + "& validates booking against quote, no delivery")
     // Gathers quotes and then creates a unique booking for a customer's desired store
     // Test checks that the returned booking is the same as the quote selected
-    void bookQuotefromStoreTest() {
+    void bookQuoteNoDelivTest() {
         // Setup the query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
         // Would like 1 MTB bike, 1 street bike
@@ -248,5 +258,83 @@ public class NEATSystemTests {
                 && (newBooking.getDepositAmount() == selectedQuote.getTotalDeposit())
                 && (newBooking.getBikeList() == selectedQuote.getBikeList())
                 && (newBooking.getOrderNo() != null));
+    }
+    
+ /*   @Test
+    @DisplayName("TEST 4: Create booking from quote & checks that the Booking's delivery is scheduled"
+            + " using the DeliveryService")
+    // Gathers quotes and then creates a unique booking for a customer's desired store
+    // Test checks that the returned booking is the same as the quote selected
+    // and also check the functionality of the delivery service
+    void bookQuoteWDelivTest() {
+        // Setup the query and add the bikes and desired quantities
+        Map<BikeType, Integer> desiredBikes = new HashMap<>();
+        // Would like 1 MTB bike, 1 street bike
+        desiredBikes.put(mountain, 1);
+        desiredBikes.put(street, 1);
+        
+        // Get quotes in Edinburgh between 5th May 2020 and 15th May 2020, in EH postcodes
+        DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 5), LocalDate.of(2020, 5, 15));     
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
+                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"));
+        
+        Booking newBooking = null;
+        // Choose ediProvider3 to fulfill the order, and set to REQUIRING delivery
+        // This will trigger the necessary logic to schedule the booking for delivery
+        for (Quote quote:result) {
+            if (quote.getProvider() == ediProvider3) {
+                newBooking = quoteController.bookQuote(quote, testCustomer, true);
+            }
+        }
+        
+        MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
+        assertEquals(newBooking, deliveryService.getPickupsOn(desiredDates.getStart()));
+        
+    } */
+    
+    @Test
+    @DisplayName("TEST 5: Creates 2 bookings and verifies that these are recorded in *that Provider's* BookingController")
+    // Gathers quotes and then creates a unique booking for a customer's desired store *2
+    // Test checks that the created bookings are present in the BookingController class
+    void quoteBookingsCaptureTest() {
+        /// FIRST QUOTE AND BOOKING: 1 MTB AND 1 STREET BIKE FROM EDIPROVIDER3
+        // Setup the first query and add the bikes and desired quantities
+        Map<BikeType, Integer> desiredBikes = new HashMap<>();
+        // Would like 1 MTB bike, 1 street bike
+        desiredBikes.put(mountain, 1);
+        desiredBikes.put(street, 1);
+        
+        // Get quotes in Edinburgh between 5th May 2020 and 15th May 2020, in EH postcodes
+        DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 5), LocalDate.of(2020, 5, 15));     
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
+                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"));
+        
+        Booking newBooking = null;
+        // Choose ediProvider3 to fulfill the order, and set to not requiring delivery
+        for (Quote quote:result) {
+            if (quote.getProvider() == ediProvider3) {
+                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+            }
+        }
+        
+        /// SECOND QUOTE AND BOOKING: 1 BMX BIKE FROM GLASGOWPROVIDER1
+        // Setup the first query and add the bikes and desired quantities
+        Map<BikeType, Integer> desiredBikes2 = new HashMap<>();
+        // Would like 1 BMX bike
+        desiredBikes2.put(bmx, 1);
+        
+        // Get quotes in Edinburgh between 12th June 2020 and 18th July 2020, in Glasgow postcodes
+        DateRange desiredDates2 = new DateRange(LocalDate.of(2020, 6, 12), LocalDate.of(2020, 7, 18));     
+        Set<Quote> result2 = quoteController.getQuotes(desiredDates2, scottishBikeProviders, 
+                desiredBikes, new Location("G2 EXY7", "Chris Hadfield Street, Glasgow"));
+        
+        // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
+        for (Quote quote:result2) {
+            if (quote.getProvider() == glasgowProvider1) {
+                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+            }
+        }
+        
+        
     }
 }

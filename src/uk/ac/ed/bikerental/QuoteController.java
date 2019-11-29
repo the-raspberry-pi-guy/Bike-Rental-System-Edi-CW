@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class QuoteController {
-    Customer customerOwner;
-	
+    private Customer customerOwner;
 	private HashSet<Quote> quoteList;
 
 	@Override
@@ -19,7 +18,7 @@ public class QuoteController {
     }
 
     public QuoteController(Customer owner) {
-		quoteList = new HashSet<Quote>();
+		this.quoteList = new HashSet<Quote>();
 		this.customerOwner = owner;
 	}
 
@@ -95,12 +94,19 @@ public class QuoteController {
 	}
 
 	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
-		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
+		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), 
+		        chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
 		chosenQuote.getProvider().getBookingList().add(booking);
 		
 		for (Bike bike:chosenQuote.getBikeList()) {
 		    bike.makeUnavailable(chosenQuote.getBookingRange());
 		}
+		
+/*		if (requiresDelivery) {
+	          DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, booking.getHireProvider().getContactDetails().getLocation(), 
+	                  booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
+		} */
+		
 		return booking;
 	}
 	

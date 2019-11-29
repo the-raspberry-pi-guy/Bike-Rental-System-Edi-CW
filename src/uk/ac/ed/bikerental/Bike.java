@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
-public class Bike implements Deliverable {
+public class Bike {
 	
 	private HashSet<DateRange> datesBooked;
 	private BikeType type;
@@ -14,7 +14,8 @@ public class Bike implements Deliverable {
 	private UUID bikeId;
 	
 	enum Status {
-		IN_TRANSIT,
+		IN_TRANSIT_TO_CUSTOMER,
+		IN_TRANSIT_TO_STORE,
 		WITH_CUSTOMER,
 		IN_STORE
 	}
@@ -43,6 +44,10 @@ public class Bike implements Deliverable {
 
     public UUID getBikeId() {
         return bikeId;
+    }
+
+    public void setBikeStatus(Status bikeStatus) {
+        this.bikeStatus = bikeStatus;
     }
 
     public Status getBikeStatus() {
@@ -96,27 +101,5 @@ public class Bike implements Deliverable {
                 && Objects.equals(dateOfPurchase, other.dateOfPurchase)
                 && Objects.equals(datesBooked, other.datesBooked) && Objects.equals(type, other.type);
     }
-
-    // Below methods are currently pretty loose and flawed, but implement the interface.
-    
-	@Override
-	public void onPickup() {
-		
-		if(bikeStatus == Status.IN_STORE) {
-			bikeStatus = Status.IN_TRANSIT;
-		} else if(bikeStatus == Status.WITH_CUSTOMER) {
-			bikeStatus = Status.IN_TRANSIT;
-		}
-	}
-
-	@Override
-	public void onDropoff() {
-		
-		if(bikeStatus == Status.IN_TRANSIT) {
-			bikeStatus = Status.WITH_CUSTOMER;
-		} else {
-			bikeStatus = Status.IN_STORE;
-		}
-	}
     
 }
