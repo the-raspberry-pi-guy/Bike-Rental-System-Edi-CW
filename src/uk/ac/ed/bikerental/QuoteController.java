@@ -80,7 +80,7 @@ public class QuoteController {
         if(totalPrice == null) {
             return null;
         }
-        BigDecimal totalDeposit = getDeposit(totalPrice, provider);
+        BigDecimal totalDeposit = getDeposit(bikeList, provider);
         Quote quote = new Quote(dates, provider, bikeList, totalPrice, totalDeposit);
         return quote;
     }
@@ -98,7 +98,8 @@ public class QuoteController {
                     System.out.println(String.format("No daily price for bikeType %s from provider %s", bike.getType(),provider.getStoreName()));
                     return null;
                 }
-                totalPrice.add(dailyPrice.multiply(new BigDecimal(dates.toDays())));
+                BigDecimal days = new BigDecimal(dates.toDays());
+                totalPrice = totalPrice.add(dailyPrice.multiply(days));
             }
         }
         
@@ -106,10 +107,16 @@ public class QuoteController {
     }
     
     // Calculates the deposit given a total price and a bike provider
-    private BigDecimal getDeposit(BigDecimal totalPrice, BikeProvider provider) {
-
-    	BigDecimal priceDepositMultiplier = new BigDecimal("1").subtract(provider.getDepositRate().divide(new BigDecimal("100")));
-    	return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
+    private BigDecimal getDeposit(Set<Bike> bikes, BikeProvider provider) {
+    	BigDecimal totalDeposit = new BigDecimal(0);
+    	
+    	for(Bike bike: bikes) {
+    		BigDecimal replacementValue = bike.getType().getReplacementValue();
+    		BigDecimal percent = provider.getDepositRate().divide(new BigDecimal(100));
+    		totalDeposit = totalDeposit.add(replacementValue.multiply(percent));
+    	}
+    	
+    	return totalDeposit;
     }
 
 	public Booking bookQuote(Quote chosenQuote, boolean requiresDelivery) {
