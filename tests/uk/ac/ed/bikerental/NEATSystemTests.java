@@ -136,7 +136,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 10th Nov and 20th Nov 2019, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 10, 10), LocalDate.of(2019, 10, 20));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+                desiredBikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"), null, null);
         
         HashMap<BikeType, Integer> resultBikes = new HashMap<BikeType, Integer>();
         
@@ -176,7 +176,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 10th Nov and 20th Nov 2019, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 10, 10), LocalDate.of(2019, 10, 20));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+                desiredBikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"), null, null);
         
         // For each quote, check that the calculated total price is correct, and also check that the
         // calculated total deposit is correct. This query only contains EdiProvider2 and EdiProvider3 (from the test before)
@@ -212,7 +212,7 @@ public class NEATSystemTests {
         Location location = new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh");
         
         Set<Quote> prevResult = quoteController.getQuotes(prevBookingDates, scottishBikeProviders, 
-                bikesToMakeUnavail, location);
+                bikesToMakeUnavail, location, null, null);
         
         for (Quote quote:prevResult) {
             if (quote.getProvider() == ediProvider3) { // Book the bikes for ediProvider3
@@ -229,7 +229,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 5th Dec and 7th Dec 2019, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 12, 5), LocalDate.of(2019, 12, 7)); 
         
-        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, desiredBikes, location);
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, desiredBikes, location, null, null);
         
         // Loops through the returned bikes in each quote, counts how many there are of each type
         // This is then checked against the original query, and equality is asserted
@@ -296,7 +296,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 5th May 2020 and 15th May 2020, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 5), LocalDate.of(2020, 5, 15));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"));
+                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"), null, null);
         
         Booking newBooking = null;
         Quote selectedQuote = null;
@@ -334,7 +334,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 5th May 2020 and 15th May 2020, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 5), LocalDate.of(2020, 5, 15));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"));
+                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"), null, null);
         
         Booking newBooking = null;
         // Choose ediProvider3 to fulfill the order, and set to REQUIRING delivery
@@ -368,7 +368,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 5th May 2020 and 15th May 2020, in EH postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 5), LocalDate.of(2020, 5, 15));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"));
+                desiredBikes, new Location("EH3 XEY", "Gus Grissom Square, Edinburgh"), null, null);
         
         Booking firstBooking = null;
         // Choose ediProvider3 to fulfill the order, and set to not requiring delivery
@@ -387,7 +387,7 @@ public class NEATSystemTests {
         // Get quotes in Edinburgh between 12th June 2020 and 18th July 2020, in Glasgow postcodes
         DateRange desiredDates2 = new DateRange(LocalDate.of(2020, 6, 12), LocalDate.of(2020, 7, 18));     
         Set<Quote> result2 = quoteController.getQuotes(desiredDates2, scottishBikeProviders, 
-                desiredBikes, new Location("EH8 9NP", "Chris Hadfield Street, Glasgow"));
+                desiredBikes, new Location("EH8 9NP", "Chris Hadfield Street, Glasgow"), null, null);
         
         Booking secondBooking = null;
         // Choose ediProvider3 to fulfill the order, and set to not requiring delivery
@@ -418,7 +418,7 @@ public class NEATSystemTests {
         // Get quotes in Glasgow between 20th May 2020 and 24th May 2020, in G2 postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 20), LocalDate.of(2020, 5, 24));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("G2 EXTY", "Yuri Avenue, Glasgow"));
+                desiredBikes, new Location("G2 EXTY", "Yuri Avenue, Glasgow"), null, null);
         
         Booking glasgowBooking = null;
         // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
@@ -466,7 +466,7 @@ public class NEATSystemTests {
         // Get quotes in Glasgow between 20th May 2020 and 24th May 2020, in G2 postcodes
         DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 20), LocalDate.of(2020, 5, 24));     
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
-                desiredBikes, new Location("G2 EXTY", "Chaffee Lane, Glasgow"));
+                desiredBikes, new Location("G2 EXTY", "Chaffee Lane, Glasgow"), null, null);
         
         Booking glasgowBooking = null;
         // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
