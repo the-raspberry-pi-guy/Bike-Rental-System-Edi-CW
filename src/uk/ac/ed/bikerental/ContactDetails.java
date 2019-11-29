@@ -1,5 +1,10 @@
 package uk.ac.ed.bikerental;
 
+/*
+ * ContactDetails holds relevant information to an individual or organisation, be it a customer or a provider.
+ * It holds a Location object and a phoneNo, enough to fully identify a person.
+ */
+
 public class ContactDetails {
 	
 	@Override

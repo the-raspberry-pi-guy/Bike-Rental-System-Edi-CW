@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/*
+ * Represents a given ValuationPolicy, in this case DoubleDecliningBalanceDepreciation. This can be implemented to
+ * enforce this policy, calculating prices based on the double declining balance depreciation formula defined in this 
+ * class rather than the default calculations in BikeProvider.
+ */
+
 public class DoubleDecliningBalanceDepreciation implements ValuationPolicy {
     private BigDecimal depreciationRate;
     

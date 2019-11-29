@@ -2,12 +2,17 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
+/*
+ * The main controller class for handling quotes for a given customer. It allows for core functionality where quotes
+ * can be generated and then booked for a given customer that 'owns' the QuoteController. It performs all the key
+ * calculations related to this that aren't covered in other objects.
+ */
 
 public class QuoteController {
     private Customer customerOwner;
@@ -44,11 +49,12 @@ public class QuoteController {
         return nearbyProviders;
     }
 
-    private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
-        HashSet<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
-        
-        for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
-            Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
+	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
+		HashSet<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
+		
+		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
+			Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates);
+			// If the number of available bikes for the given provider is enough to support the quote, add those bikes to the bikeList
 
             if(available.size() >= chosenType.getValue()) { // If there are enough available bikes, get them, else return null
                 int i = 0; 
@@ -93,25 +99,25 @@ public class QuoteController {
         return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
     }
 
-    public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
-        
-        Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), 
-                chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
-        
-        chosenQuote.getProvider().getBookingList().add(booking);
-        
-        for (Bike bike:booking.getBikeList()) {
-            bike.makeUnavailable(booking.getHireDates());
-        }
-        
-        if (requiresDelivery) {
-              DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, booking.getHireProvider().getContactDetails().getLocation(), 
-                      booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
-        } 
-        
-        return booking;
-    }
-    
+	public Booking bookQuote(Quote chosenQuote, boolean requiresDelivery) {
+		
+		// Create a booking object with the given parameters and add it to the provider's bookingList in BookingController
+		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), 
+		chosenQuote.getBikeList(), chosenQuote.getProvider(), customerOwner);
+		chosenQuote.getProvider().getBookingList().add(booking);
+
+		//Make each bike in the booking unavailable over the hire dates using makeUnavailable
+		for (Bike bike:booking.getBikeList()) {
+			bike.makeUnavailable(booking.getHireDates());
+		}
+		//If delivery is needed, schedule it using the DeliveryService
+		if (requiresDelivery) {
+	          DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, booking.getHireProvider().getContactDetails().getLocation(), 
+	                  booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
+		} 
+		
+		return booking;
+	}
 
     @Override
     public int hashCode() {

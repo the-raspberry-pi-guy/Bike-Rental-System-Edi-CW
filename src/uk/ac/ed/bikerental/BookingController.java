@@ -4,6 +4,11 @@ package uk.ac.ed.bikerental;
 import java.util.HashSet;
 import java.util.Objects;
 
+/*
+ * A BookingController holds all bookings for a given provider that it belongs to, allowing for easy access
+ * to the details of any particular booking.
+ */
+
 public class BookingController {
 
 	private HashSet<Booking> bookingList;
