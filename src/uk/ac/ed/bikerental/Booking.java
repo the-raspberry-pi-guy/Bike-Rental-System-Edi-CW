@@ -7,6 +7,13 @@ import java.util.UUID;
 
 import uk.ac.ed.bikerental.Bike.Status;
 
+/*
+ * A Booking represents a single booking within the system, and holds all necessary information regarding that booking.
+ * A booking is only ever created when a customer desires to book a given quote, and implies that payment has been made.
+ * Booking implements the Deliverable interface, as the DeliveryService will handle delivering all bikes associated with
+ * a given booking, which are held here under bikeList.
+ */
+
 public class Booking implements Deliverable{
 
 	private static final Status UNCOMPLETE = null;

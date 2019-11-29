@@ -12,6 +12,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+/*
+ * A BikeProvider represents a provider in the system, and handles the operations and data related to a provider
+ * and the bikes they own. Bikes can be added and removed, their rental prices set, and bookings for a given
+ * provider are handled by its own unique BookingController. The actual fetching and booking of quotes is done
+ * by a QuoteController.
+ */
+
 public class BikeProvider {
 	
 	private String storeName;
@@ -21,7 +28,7 @@ public class BikeProvider {
 	private Map<BikeType, BigDecimal> typePrice; // Map from Bike Type to BigDecimal price
 	private HashSet<Bike> providerBikes;
 	private BigDecimal depositRate;
-	private BookingController bookingController;
+	private BookingController bookingController; // A provider has its own booking controller for related bookings
 	
 	public BikeProvider(String name, ContactDetails providerDetails, Map<String, String> openHours) {
 		this.storeName = name;
@@ -51,6 +58,7 @@ public class BikeProvider {
 	}
 	
 	public void setTypePrice(BikeType type, BigDecimal dailyRentalPrice) {
+		// Set the daily rental price of a BikeType, or create one in the Map if it's not there
 		if(typePrice.containsKey(type)) {
 			typePrice.replace(type, dailyRentalPrice);
 		} else {
@@ -112,6 +120,7 @@ public class BikeProvider {
     }
     
     public BigDecimal getDailyPrice(BikeType type) {
+    	//If it's in the typePrice Map, return its value
     	if(typePrice.containsKey(type)) {
         	return typePrice.get(type);
     	} else {
@@ -124,7 +133,8 @@ public class BikeProvider {
     }
 
     public Set<Bike> getAvailableForType(BikeType type, DateRange dates) {
-		Set<Bike> bikes = new HashSet<Bike>();
+    	//Looks at the provider bikes and builds up a set of Bikes of a given type, where each bike is unique.
+    	Set<Bike> bikes = new HashSet<Bike>();
 
 		for(Bike bike: providerBikes) {
 			if(bike.getType() == type && bike.isAvailable(dates)) {

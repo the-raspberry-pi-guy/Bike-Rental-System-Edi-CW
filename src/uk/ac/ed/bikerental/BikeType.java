@@ -1,7 +1,12 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
-// Add id?
+
+/*
+ * A BikeType represents the type of a Bike object, and as we are assuming all bikes of a given type are identical,
+ * they all have the same replacement value.
+ */
+
 public class BikeType {
 	
 	private String typeModel;

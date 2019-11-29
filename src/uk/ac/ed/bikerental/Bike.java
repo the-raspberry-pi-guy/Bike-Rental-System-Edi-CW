@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
+/*
+ * The Bike class represents a single bike in the system. Bikes are uniquely identified by their bikeId.
+ * A bike is said to be booked on a given day if that day is contained in any DateRange that is contained
+ * inside their datesBooked Set.
+ */
+
 public class Bike {
 	
 	private HashSet<DateRange> datesBooked;
@@ -71,10 +77,12 @@ public class Bike {
     } 
     
     public void makeUnavailable(DateRange range) {
+    	//Add the booked dateRange to the list of datesBooked
     	datesBooked.add(range);
     }
     
     public boolean compareType(Bike other) {
+    	//Compares the type of one bike to another
         if (this.type == other.getType()) {
             return true;
         }
