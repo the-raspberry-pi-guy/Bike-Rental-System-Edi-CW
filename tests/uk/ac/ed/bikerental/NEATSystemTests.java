@@ -382,10 +382,10 @@ public class NEATSystemTests {
     /// FOLLOWING TESTS DEMONSTRATE THE FUNCTIONALITY OF THE RETURNING BIKE USE-CASE
     
     @Test
-    @DisplayName("TEST 7: Test returning bikes to original store, checks status change")
+    @DisplayName("TEST 7: Test returning bikes to original store, checks status change throughout process")
     // Makes a booking that the customer then returns to original store
-    // Ensures that the necessary steps are undertaken to change bike status
-    void returnBikeToOriginalProviderTest() {
+    // Ensures that the necessary steps are undertaken to change bike status during ALL stages of process
+    void bookReturnBikeToOriginalProviderTest() {
         // Setup the first query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
         // Would like 2 Street bikes
@@ -400,12 +400,83 @@ public class NEATSystemTests {
         // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
         for (Quote quote:result) {
             if (quote.getProvider() == glasgowProvider1) {
-
                 glasgowBooking = quoteController.bookQuote(quote, false);
-
             }
         }
         
+        // BOOKING DOES NOT REQUIRE DELIVERY
+        glasgowBooking.onPickup(); // Pick up from the store, set booking to: BIKES_WITH_CUSTOMER, set bikes to: WITH_CUSTOMER
         
+        // Checks that the status of the booking and the bikes are changed to WITH CUSTOMER representation when directly picked up
+        assertEquals(Booking.Status.BIKES_WITH_CUSTOMER, glasgowBooking.getStatus());
+        for (Bike bike:glasgowBooking.getBikeList()) {
+            assertEquals(Bike.Status.WITH_CUSTOMER, bike.getBikeStatus());
+        }
+        
+        // Customer brings bikes back to the original store, employee enters their UUID
+        glasgowProvider1.recordBikeReturnToOriginalStore(glasgowBooking.getOrderNo());
+        
+        // Checks that the status of the booking and the bikes are changed to COMPLETE/IN STORE representation when directly picked up
+        assertEquals(Booking.Status.COMPLETE, glasgowBooking.getStatus());
+        for (Bike bike:glasgowBooking.getBikeList()) {
+            assertEquals(Bike.Status.IN_STORE, bike.getBikeStatus());
+        }
+    }
+    
+    @Test
+    @DisplayName("TEST 8: Test Delivery Scheduled when returning to PARTNER store, checks status change throughout process")
+    // Makes a booking that the customer then returns to the partner store (ediProvider1)
+    // Ensures that the necessary steps are undertaken to change bike status during ALL stages of process
+    void bookReturnBikeToPartnerTest() {
+        
+        // Add ediProvider1 to glasgowProvider1's list of partner stores
+        // Make the relationship 2-ways
+        glasgowProvider1.addPartner(ediProvider1);
+        ediProvider1.addPartner(glasgowProvider1);
+        
+        // Setup the first query and add the bikes and desired quantities
+        Map<BikeType, Integer> desiredBikes = new HashMap<>();
+        // Would like 1 BMX bike
+        desiredBikes.put(bmx, 1);
+        
+        // Get quotes in Glasgow between 20th May 2020 and 24th May 2020, in G2 postcodes
+        DateRange desiredDates = new DateRange(LocalDate.of(2020, 5, 20), LocalDate.of(2020, 5, 24));     
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
+                desiredBikes, new Location("G2 EXTY", "Chaffee Lane, Glasgow"));
+        
+        Booking glasgowBooking = null;
+        // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
+        for (Quote quote:result) {
+            if (quote.getProvider() == glasgowProvider1) {
+                glasgowBooking = quoteController.bookQuote(quote, true);
+            }
+        }
+        
+        // BOOKING DOES REQUIRE DELIVERY
+        glasgowBooking.onPickup(); // Pick up from the store, set booking to: BIKES_WITH_CUSTOMER, set bikes to: WITH_CUSTOMER
+        
+        // Checks that the status of the booking and the bikes are changed to WITH CUSTOMER representation when directly picked up
+        assertEquals(Booking.Status.IN_TRANSIT_TO_CUSTOMER, glasgowBooking.getStatus());
+        for (Bike bike:glasgowBooking.getBikeList()) {
+            assertEquals(Bike.Status.IN_TRANSIT_TO_CUSTOMER, bike.getBikeStatus());
+        }
+        
+        glasgowBooking.onDropoff(); // Drop off at the customer
+        // Checks that the status of the booking and the bikes are changed to WITH CUSTOMER representation when directly picked up
+        assertEquals(Booking.Status.BIKES_WITH_CUSTOMER, glasgowBooking.getStatus());
+        for (Bike bike:glasgowBooking.getBikeList()) {
+            assertEquals(Bike.Status.WITH_CUSTOMER, bike.getBikeStatus());
+        }
+        
+        // Customer brings bikes back to the original store, employee enters their UUID
+        ediProvider1.recordBikeReturnToPartnerStore(glasgowBooking);
+        
+        // Get the bookings that are scheduled for the end of the hire period, on the day the customer returns their bikes to the
+        // other provider
+        MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
+        Collection<Deliverable> bookingsToBeDelivered = deliveryService.getPickupsOn(glasgowBooking.getHireDates().getEnd());
+        
+        // Check that a booking has been scheduled to send bike back to its ORIGINAL STORE on the end of the hire date
+        assertTrue(bookingsToBeDelivered.contains(glasgowBooking));
     }
 }

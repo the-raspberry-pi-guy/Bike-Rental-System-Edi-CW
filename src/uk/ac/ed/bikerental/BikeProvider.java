@@ -40,14 +40,12 @@ public class BikeProvider {
 	    this.typePrice = new HashMap<BikeType, BigDecimal>();
 	    this.depositRate = new BigDecimal("0");
 	    this.bookingController = new BookingController();
-	}
-	
+	}	
 	
 	@Override
     public String toString() {
         return "BikeProvider [storeName=" + storeName + ", providerDetails=" + providerDetails + "]";
     }
-
 
     public void addBiketoStore(Bike bike) {
 	    providerBikes.add(bike);
@@ -82,18 +80,26 @@ public class BikeProvider {
 	    partners.remove(otherProvider);
 	}
 	
-	public void recordBikeReturn(UUID orderNo) {
+	public void recordBikeReturnToOriginalStore(UUID orderNo) {
+	    
+	    // Call onDropOff implementation for the original store
 	    for(Booking booking: bookingController.getBookingList()) {
 	    	if(booking.getOrderNo().equals(orderNo)) {
-	    		for(Bike bike: booking.getBikeList()) {
-	    			//bike.onDropoff();
-	    			if(booking.getHireProvider() != this) {
-	    				notifyOriginalProvider(orderNo);
-	    			}
-	    		}
+	    	    booking.onDropoff();
 	    	}
 	    }
-	} 
+	}
+	
+   public void recordBikeReturnToPartnerStore(Booking booking) {
+        
+       // Check whether other store in the booking is a partner
+       // If so, immediately schedule a new delivery to the original provider
+       if(this.getPartners().contains(booking.getHireProvider())) {
+           DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, this.getProviderDetails().getLocation(), 
+                   booking.getHireProvider().getProviderDetails().getLocation(), booking.getHireDates().getEnd());;
+       }
+   }
+
 	
 	public void notifyOriginalProvider(UUID orderNo) {
 	    System.out.println("The bikes from order " + orderNo.toString() + " have been returned to a partner store.");

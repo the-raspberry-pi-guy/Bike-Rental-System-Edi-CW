@@ -16,7 +16,6 @@ import uk.ac.ed.bikerental.Bike.Status;
 
 public class Booking implements Deliverable{
 
-	private static final Status UNCOMPLETE = null;
     private final UUID orderNo;
 	private final DateRange hireDates;
 	private final boolean requiresDelivery;
@@ -46,7 +45,7 @@ public class Booking implements Deliverable{
 		this.hireProvider = provider;
 		this.bikeList = bikeList;
 		this.customer = customer;
-		this.bookingStatus = UNCOMPLETE;
+		this.bookingStatus = Status.UNCOMPLETE;
 	}
 	
     @Override
@@ -62,7 +61,8 @@ public class Booking implements Deliverable{
         
         // Change the status of the booking
         if (bookingStatus == Booking.Status.UNCOMPLETE) {
-            bookingStatus = Booking.Status.IN_TRANSIT_TO_CUSTOMER;
+            if (this.requiresDelivery) bookingStatus = Booking.Status.IN_TRANSIT_TO_CUSTOMER;
+            else bookingStatus = Booking.Status.BIKES_WITH_CUSTOMER;
         } else if (bookingStatus == Booking.Status.BIKES_WITH_CUSTOMER) {
             bookingStatus = Booking.Status.IN_TRANSIT_TO_STORE;
         }
@@ -70,7 +70,8 @@ public class Booking implements Deliverable{
         // Change the status of all of the bikes in the booking
         for (Bike bike:bikeList) {
             if(bike.getBikeStatus() == Bike.Status.IN_STORE) {
-                bike.setBikeStatus(Bike.Status.IN_TRANSIT_TO_CUSTOMER);
+                if (this.requiresDelivery) bike.setBikeStatus(Bike.Status.IN_TRANSIT_TO_CUSTOMER);
+                else bike.setBikeStatus(Bike.Status.WITH_CUSTOMER);
             } else if(bike.getBikeStatus() == Bike.Status.WITH_CUSTOMER) {
                 bike.setBikeStatus(Bike.Status.IN_TRANSIT_TO_STORE);
             }
@@ -85,6 +86,8 @@ public class Booking implements Deliverable{
             bookingStatus = Booking.Status.BIKES_WITH_CUSTOMER;
         } else if (bookingStatus == Booking.Status.IN_TRANSIT_TO_STORE) {
             bookingStatus = Booking.Status.COMPLETE;
+        } else if (bookingStatus == Booking.Status.BIKES_WITH_CUSTOMER) {
+            bookingStatus = Booking.Status.COMPLETE;
         }
         
         // Change the status of all of the bikes in the booking
@@ -92,6 +95,8 @@ public class Booking implements Deliverable{
             if(bike.getBikeStatus() == Bike.Status.IN_TRANSIT_TO_CUSTOMER) {
                 bike.setBikeStatus(Bike.Status.WITH_CUSTOMER);
             } else if(bike.getBikeStatus() == Bike.Status.IN_TRANSIT_TO_STORE) {
+                bike.setBikeStatus(Bike.Status.IN_STORE);
+            } else if(bike.getBikeStatus() == Bike.Status.WITH_CUSTOMER) {
                 bike.setBikeStatus(Bike.Status.IN_STORE);
             }
         }        
@@ -132,6 +137,10 @@ public class Booking implements Deliverable{
 	public Customer getCustomer() {
 		return customer;
 	}
+
+    public Status getStatus() {
+        return bookingStatus;
+    }
 
     @Override
     public int hashCode() {
