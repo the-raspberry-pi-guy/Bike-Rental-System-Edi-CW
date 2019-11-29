@@ -1,5 +1,10 @@
 package uk.ac.ed.bikerental;
 
+/*
+ * A Customer object represents a customer in the system, holding their personal details.
+ * A Customer has their own QuoteController object for all Quotes related to them.
+ */
+
 public class Customer {
 	
 	private String firstName;

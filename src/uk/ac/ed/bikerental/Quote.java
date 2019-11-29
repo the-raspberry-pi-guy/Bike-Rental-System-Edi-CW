@@ -6,6 +6,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
+/*
+ * Represents a single quote in the system, containing all information that the customer has entered to narrow down
+ * their results. Quotes do not affect the rest of the system like Bookings.
+ */
+
 public class Quote {
 	
 	private DateRange bookingRange;

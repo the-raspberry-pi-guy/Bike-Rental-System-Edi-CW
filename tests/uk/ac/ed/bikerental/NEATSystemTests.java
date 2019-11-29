@@ -214,7 +214,7 @@ public class NEATSystemTests {
         
         for (Quote quote:prevResult) {
             if (quote.getProvider() == ediProvider3) { // Book the bikes for ediProvider3
-                quoteController.bookQuote(quote, testCustomer, false);
+                quoteController.bookQuote(quote, false);
             }
         }
 
@@ -280,7 +280,7 @@ public class NEATSystemTests {
         for (Quote quote:result) {
             if (quote.getProvider() == ediProvider3) {
                 selectedQuote = quote;
-                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+                newBooking = quoteController.bookQuote(quote, false);
             }
         }
         
@@ -317,7 +317,7 @@ public class NEATSystemTests {
         // This will trigger the necessary logic to schedule the booking for delivery
         for (Quote quote:result) {
             if (quote.getProvider() == ediProvider3) {
-                newBooking = quoteController.bookQuote(quote, testCustomer, true);
+                newBooking = quoteController.bookQuote(quote, true);
             }
         }
         
@@ -350,7 +350,7 @@ public class NEATSystemTests {
         // Choose ediProvider3 to fulfill the order, and set to not requiring delivery
         for (Quote quote:result) {
             if (quote.getProvider() == ediProvider3) {
-                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+                newBooking = quoteController.bookQuote(quote, false);
             }
         }
         
@@ -368,7 +368,7 @@ public class NEATSystemTests {
         // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
         for (Quote quote:result2) {
             if (quote.getProvider() == glasgowProvider1) {
-                newBooking = quoteController.bookQuote(quote, testCustomer, false);
+                newBooking = quoteController.bookQuote(quote, false);
             }
         }
     }

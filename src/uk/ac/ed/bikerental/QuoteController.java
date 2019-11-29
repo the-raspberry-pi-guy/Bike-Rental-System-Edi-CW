@@ -2,12 +2,17 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
+/*
+ * The main controller class for handling quotes for a given customer. It allows for core functionality where quotes
+ * can be generated and then booked for a given customer that 'owns' the QuoteController. It performs all the key
+ * calculations related to this that aren't covered in other objects.
+ */
 
 public class QuoteController {
     private Customer customerOwner;
@@ -49,35 +54,29 @@ public class QuoteController {
 
 	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
 		HashSet<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
-		// Builds up the bikeList if possible
-		addIfAvailable(provider, desiredBikeMap, dates, bikeList);
-		// If we didn't get enough bikes the list should be empty
-		if(bikeList.size() == 0) return null;
-		//Get the total price and deposit for the quote
-		BigDecimal totalPrice = getTotalPrice(desiredBikeMap, provider, dates);
-		if(totalPrice == null) return null;
-		BigDecimal totalDeposit = getDeposit(totalPrice, provider);
-		//Finally, we can build the Quote object and return it
-		Quote quote = new Quote(dates, provider, bikeList, totalPrice, totalDeposit);
-		return quote;
-	}
-	
-	private void addIfAvailable(BikeProvider provider, Map<BikeType, Integer> desiredBikeMap, DateRange dates, Set<Bike> bikeList) {
+		
 		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
-			Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates); // Check how many of that type are available from the provider
+			Set<Bike> available = provider.getAvailableForType(chosenType.getKey(), dates);
 			// If the number of available bikes for the given provider is enough to support the quote, add those bikes to the bikeList
 			if(available.size() >= chosenType.getValue()) {
 				int i = 0; 
-				for(Bike bike:available) {
+				for(Bike bike:available) { // Get the first n bikes from the provider (where n is the desired number)
 					if(i < chosenType.getValue()) {
 						bikeList.add(bike);
 						i++;
 					}
 				}
-			} else {
-				bikeList.clear();
+			} else { // If we don't have enough available bikes, don't try to make a Quote
+				return null;
 			}
 		}
+		BigDecimal totalPrice = getTotalPrice(desiredBikeMap, provider, dates);
+		if(totalPrice == null) {
+			return null;
+		}
+		BigDecimal totalDeposit = getDeposit(totalPrice, provider);
+		Quote quote = new Quote(dates, provider, bikeList, totalPrice, totalDeposit);
+		return quote;
 	}
 
 	private BigDecimal getTotalPrice(Map<BikeType, Integer> desiredBikeMap, BikeProvider provider, DateRange dates) {
@@ -103,20 +102,23 @@ public class QuoteController {
 	    return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
 	}
 
-	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
+	public Booking bookQuote(Quote chosenQuote, boolean requiresDelivery) {
+		
 		// Create a booking object with the given parameters and add it to the provider's bookingList in BookingController
 		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), 
-		        chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
+		chosenQuote.getBikeList(), chosenQuote.getProvider(), customerOwner);
 		chosenQuote.getProvider().getBookingList().add(booking);
+
 		//Make each bike in the booking unavailable over the hire dates using makeUnavailable
 		for (Bike bike:booking.getBikeList()) {
-		    bike.makeUnavailable(booking.getHireDates());
+			bike.makeUnavailable(booking.getHireDates());
 		}
 		//If delivery is needed, schedule it using the DeliveryService
 		if (requiresDelivery) {
 	          DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, booking.getHireProvider().getContactDetails().getLocation(), 
 	                  booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
-		}
+		} 
+		
 		return booking;
 	}
 	
