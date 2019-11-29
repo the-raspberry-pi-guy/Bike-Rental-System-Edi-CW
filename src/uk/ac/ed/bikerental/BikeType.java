@@ -60,5 +60,9 @@ public class BikeType {
     public String toString() {
         return "BikeType [typeModel=" + typeModel + ", replacementValue=" + replacementValue + "]";
     }
+
+	public void setReplacementValue(BigDecimal newPrice) {
+		replacementValue = newPrice;
+	}
     
 }

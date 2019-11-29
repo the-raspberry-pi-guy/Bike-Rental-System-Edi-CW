@@ -1,6 +1,7 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,11 +27,11 @@ public class QuoteController {
         this.customerOwner = owner;
     }
 
-    public Set<Quote> getQuotes(DateRange dates, HashSet<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location) {
+    public Set<Quote> getQuotes(DateRange dates, HashSet<BikeProvider> allBikeProviders, Map<BikeType, Integer> bikes, Location location, PricingPolicy pricingPolicy, ValuationPolicy valuationPolicy) {
         HashSet<Quote> resultListQuotes = new HashSet<Quote>();
         Collection<BikeProvider> nearbyProviders = getNearbyProviders(allBikeProviders, location);
         for(BikeProvider provider:nearbyProviders) {
-            Quote result = getQuoteForProvider(dates, provider, bikes);
+            Quote result = getQuoteForProvider(dates, provider, bikes, pricingPolicy, valuationPolicy);
             if(result != null) {
                 resultListQuotes.add(result);
             }
@@ -49,7 +50,7 @@ public class QuoteController {
         return nearbyProviders;
     }
 
-	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap) {
+	private Quote getQuoteForProvider(DateRange dates, BikeProvider provider, Map<BikeType, Integer> desiredBikeMap, PricingPolicy pricingPolicy, ValuationPolicy valuationPolicy) {
 		HashSet<Bike> bikeList = new HashSet<Bike>(); // Initialise bikeList
 		
 		for(Map.Entry<BikeType,Integer> chosenType:desiredBikeMap.entrySet()) { // For each bike in the desired order
@@ -68,7 +69,7 @@ public class QuoteController {
                 return null;
             }
         }
-        BigDecimal totalPrice = getTotalPrice(desiredBikeMap, provider, dates);
+        BigDecimal totalPrice = getTotalPrice(bikeList, provider, dates, valuationPolicy, pricingPolicy);
         if(totalPrice == null) {
             return null;
         }
@@ -77,26 +78,36 @@ public class QuoteController {
         return quote;
     }
 
-    private BigDecimal getTotalPrice(Map<BikeType, Integer> desiredBikeMap, BikeProvider provider, DateRange dates) {
+    private BigDecimal getTotalPrice(Set<Bike> bikes, BikeProvider provider, DateRange dates, ValuationPolicy valuationPolicy, PricingPolicy pricingPolicy) {
         BigDecimal totalPrice = new BigDecimal("0");
-        for(Map.Entry<BikeType,Integer> currentType:desiredBikeMap.entrySet()){
-            BigDecimal dailyPrice = provider.getDailyPrice(currentType.getKey());
+        for(Bike bike: bikes){
+        	if((valuationPolicy instanceof LinearDepreciation) || (valuationPolicy instanceof DoubleDecliningBalanceDepreciation)) {
+        		bike.setFluidValue(valuationPolicy.calculateValue(bike, LocalDate.now()));
+        		provider.setTypePrice(bike.getType(), bike.getFluidValue());
+        	}
+            BigDecimal dailyPrice = provider.getDailyPrice(bike.getType());
             if(dailyPrice == null) { // Meant to return null if a daily price has not been set
-                System.out.println(String.format("No daily price for bikeType %s from provider %s", currentType.getKey().getBikeType(),provider.getStoreName()));
+                System.out.println(String.format("No daily price for bikeType %s from provider %s", bike.getType(),provider.getStoreName()));
                 return null;
             }
-            BigDecimal typePrice = dailyPrice.multiply(new BigDecimal(currentType.getValue())); // Multiply by the number of desired bikes of that type
-            typePrice = typePrice.multiply(new BigDecimal(ChronoUnit.DAYS.between(dates.getStart(),dates.getEnd()))); // Multiplies by the number of days
-            totalPrice = totalPrice.add(typePrice);
         }
+        
+        if(pricingPolicy instanceof MultidayDiscountPolicy) {
+        	totalPrice = pricingPolicy.calculatePrice(bikes, dates);
+        } else {
+        	for(Bike bike: bikes) {
+        		totalPrice.add(provider.getDailyPrice(bike.getType()).multiply(new BigDecimal(dates.toDays())));
+        	}
+        }
+        
         return totalPrice;
     }
     
     // Calculates the deposit given a total price and a bike provider
     private BigDecimal getDeposit(BigDecimal totalPrice, BikeProvider provider) {
-        BigDecimal priceDepositMultiplier = new BigDecimal("1").subtract(provider.getDepositRate().divide
-                                                    (new BigDecimal("100")));
-        return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
+
+    	BigDecimal priceDepositMultiplier = new BigDecimal("1").subtract(provider.getDepositRate().divide(new BigDecimal("100")));
+    	return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
     }
 
 	public Booking bookQuote(Quote chosenQuote, boolean requiresDelivery) {

@@ -1,5 +1,6 @@
 package uk.ac.ed.bikerental;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Bike {
 	private BikeType type;
 	private LocalDate dateOfPurchase;
 	private UUID bikeId;
+	private BigDecimal fluidValue;
 	
 	enum Status {
 		IN_TRANSIT_TO_CUSTOMER,
@@ -34,6 +36,7 @@ public class Bike {
 		this.datesBooked = new HashSet<DateRange>();
 		this.bikeStatus = Status.IN_STORE;
 		this.bikeId = UUID.randomUUID();
+		this.fluidValue = type.getReplacementValue(); // Init in case of default case with no valuation
 	}
 	
     public BikeType getType() {
@@ -58,6 +61,14 @@ public class Bike {
 
     public Status getBikeStatus() {
         return bikeStatus;
+    }
+    
+    public void setFluidValue(BigDecimal value) {
+    	fluidValue = value;
+    }
+    
+    public BigDecimal getFluidValue() {
+    	return fluidValue;
     }
 
     @Override
