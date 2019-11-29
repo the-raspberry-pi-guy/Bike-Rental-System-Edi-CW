@@ -382,10 +382,10 @@ public class NEATSystemTests {
     /// FOLLOWING TESTS DEMONSTRATE THE FUNCTIONALITY OF THE RETURNING BIKE USE-CASE
     
     @Test
-    @DisplayName("TEST 7: Test returning bikes to original store, checks status change")
+    @DisplayName("TEST 7: Test returning bikes to original store, checks status change throughout process")
     // Makes a booking that the customer then returns to original store
-    // Ensures that the necessary steps are undertaken to change bike status
-    void returnBikeToOriginalProviderTest() {
+    // Ensures that the necessary steps are undertaken to change bike status during ALL stages of process
+    void bookReturnBikeToOriginalProviderTest() {
         // Setup the first query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
         // Would like 2 Street bikes
@@ -400,12 +400,26 @@ public class NEATSystemTests {
         // Choose glasgowProvider1 to fulfill the order, and set to not requiring delivery
         for (Quote quote:result) {
             if (quote.getProvider() == glasgowProvider1) {
-
                 glasgowBooking = quoteController.bookQuote(quote, false);
-
             }
         }
         
+        // BOOKING DOES NOT REQUIRE DELIVERY
+        glasgowBooking.onPickup(); // Pick up from the store, set booking to: BIKES_WITH_CUSTOMER, set bikes to: WITH_CUSTOMER
         
+        // Checks that the status of the booking and the bikes are changed to WITH CUSTOMER representation when directly picked up
+        assertEquals(Booking.Status.BIKES_WITH_CUSTOMER, glasgowBooking.getStatus());
+        for (Bike bike:glasgowBooking.getBikeList()) {
+            assertEquals(Bike.Status.WITH_CUSTOMER, bike.getBikeStatus());
+        }
+        
+        // Customer brings bikes back to the original store, employee enters their UUID
+        glasgowProvider1.recordBikeReturnToOriginalStore(glasgowBooking.getOrderNo());
+        
+        // Checks that the status of the booking and the bikes are changed to COMPLETE/IN STORE representation when directly picked up
+        assertEquals(Booking.Status.COMPLETE, glasgowBooking.getStatus());
+        for (Bike bike:glasgowBooking.getBikeList()) {
+            assertEquals(Bike.Status.IN_STORE, bike.getBikeStatus());
+        }
     }
 }

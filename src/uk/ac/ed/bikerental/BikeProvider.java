@@ -82,15 +82,15 @@ public class BikeProvider {
 	    partners.remove(otherProvider);
 	}
 	
-	public void recordBikeReturn(UUID orderNo) {
+	public void recordBikeReturnToOriginalStore(UUID orderNo) {
+	    
 	    for(Booking booking: bookingController.getBookingList()) {
 	    	if(booking.getOrderNo().equals(orderNo)) {
-	    		for(Bike bike: booking.getBikeList()) {
-	    			//bike.onDropoff();
-	    			if(booking.getHireProvider() != this) {
-	    				notifyOriginalProvider(orderNo);
-	    			}
-	    		}
+	    	    booking.onDropoff();
+	    	    
+    			/*if(booking.getHireProvider() != this) {
+    				notifyOriginalProvider(orderNo);
+	    		}*/
 	    	}
 	    }
 	} 
