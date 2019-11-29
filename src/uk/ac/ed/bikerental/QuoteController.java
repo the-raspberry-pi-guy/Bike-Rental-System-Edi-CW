@@ -103,6 +103,10 @@ public class QuoteController {
             }
         }
         
+        if(pricingPolicy instanceof MultidayDiscountPolicy) {
+        	totalPrice.multiply(pricingPolicy.calculatePrice(bikes, dates));
+        }
+        
         return totalPrice;
     }
     
