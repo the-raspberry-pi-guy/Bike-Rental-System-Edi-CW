@@ -100,7 +100,7 @@ public class QuoteController {
 	private BigDecimal getDeposit(BigDecimal totalPrice, BikeProvider provider) {
 	    BigDecimal priceDepositMultiplier = new BigDecimal("1").subtract(provider.getDepositRate().divide
 	                                                (new BigDecimal("100")));
-	    return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)).stripTrailingZeros());
+	    return (totalPrice.subtract(totalPrice.multiply(priceDepositMultiplier)));
 	}
 
 	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
@@ -117,7 +117,6 @@ public class QuoteController {
 	          DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, booking.getHireProvider().getContactDetails().getLocation(), 
 	                  booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
 		}
-		
 		return booking;
 	}
 	

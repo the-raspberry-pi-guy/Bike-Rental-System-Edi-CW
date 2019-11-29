@@ -135,8 +135,7 @@ public class Booking implements Deliverable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(bikeList, bookingStatus, customer, depositAmount, depositPaid, hireDates, hireProvider,
-                orderNo, requiresDelivery, totalPrice);
+        return Objects.hash(orderNo);
     }
 
     @Override
@@ -148,11 +147,7 @@ public class Booking implements Deliverable{
         if (getClass() != obj.getClass())
             return false;
         Booking other = (Booking) obj;
-        return Objects.equals(bikeList, other.bikeList) && bookingStatus == other.bookingStatus
-                && Objects.equals(customer, other.customer) && Objects.equals(depositAmount, other.depositAmount)
-                && depositPaid == other.depositPaid && Objects.equals(hireDates, other.hireDates)
-                && Objects.equals(hireProvider, other.hireProvider) && Objects.equals(orderNo, other.orderNo)
-                && requiresDelivery == other.requiresDelivery && Objects.equals(totalPrice, other.totalPrice);
+        return Objects.equals(orderNo, other.orderNo);
     }
 	
 }

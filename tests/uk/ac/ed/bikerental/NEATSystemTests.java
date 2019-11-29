@@ -117,8 +117,9 @@ public class NEATSystemTests {
     
     }
     
-    /// TEST 1 & TEST 2 DEMONSTRATE THE FUNCTIONALITY OF THE SYSTEM IN USE-CASE 1
+    /// TEST 1, TEST 2 & TEST 3 DEMONSTRATE THE FUNCTIONALITY OF THE SYSTEM IN USE-CASE 1
     /// Finding a quote, excluding non-nearby providers and bikes that are unavailable in a given range
+    /// Also checking that the price of a given quote is correct to as calculated
     
     @Test
     @DisplayName("TEST 1: Test a bike query with all bikes available. EXCLUDES "
@@ -161,7 +162,41 @@ public class NEATSystemTests {
     } 
     
     @Test
-    @DisplayName("TEST 2: Test a bike query where some bikes are already booked. EXCLUDES non-nearby providers "
+    @DisplayName("TEST 2: Test the prices are correct for the TEST 1 bike query with all bikes available. EXCLUDES "
+            + "non-nearby providers")
+    // Tests the PRICE from the right stores will provide quotes (based on location and number of bikes in store)
+    // Will exclude Glasgow store as it is not nearby. Same query as Test 1.
+    void findingQuotePriceNoUnavailTest() {
+        // Setup the query and add the bikes and desired quantities
+        Map<BikeType, Integer> desiredBikes = new HashMap<>();
+        // Would like 1 BMX bike, 2 street bikes
+        desiredBikes.put(bmx, 1);
+        desiredBikes.put(street, 2);
+        
+        // Get quotes in Edinburgh between 10th Nov and 20th Nov 2019, in EH postcodes
+        DateRange desiredDates = new DateRange(LocalDate.of(2019, 10, 10), LocalDate.of(2019, 10, 20));     
+        Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, 
+                desiredBikes, new Location("EH3 6ST", "Carl Sagan Avenue, Edinburgh"));
+        
+        // For each quote, check that the calculated total price is correct, and also check that the
+        // calculated total deposit is correct. This query only contains EdiProvider2 and EdiProvider3 (from the test before)
+        for (Quote quote:result) {
+            BigDecimal totalPrice = quote.getTotalPrice();
+            BigDecimal totalDeposit = quote.getTotalDeposit();
+            
+            if (quote.getProvider() == ediProvider2) {
+                assertEquals(new BigDecimal("1600").stripTrailingZeros(), totalPrice.stripTrailingZeros());
+                assertEquals(new BigDecimal("160").stripTrailingZeros(), totalDeposit.stripTrailingZeros());
+            }
+            if (quote.getProvider() == ediProvider3) {
+                assertEquals(new BigDecimal("1000").stripTrailingZeros(), totalPrice.stripTrailingZeros());
+                assertEquals(new BigDecimal("300").stripTrailingZeros(), totalDeposit.stripTrailingZeros());
+            }
+        }
+    } 
+    
+    @Test
+    @DisplayName("TEST 3: Test a bike query where some bikes are already booked. EXCLUDES non-nearby providers "
             + "AND bikes that are already booked")
     // Tests whether right stores will provide quotes (based on location, number of bikes in store and whether bikes booked or not)
     // Creates a previous booking in the system and then test that bikes at that store are excluded within that date range.
@@ -180,10 +215,8 @@ public class NEATSystemTests {
         for (Quote quote:prevResult) {
             if (quote.getProvider() == ediProvider3) { // Book the bikes for ediProvider3
                 quoteController.bookQuote(quote, testCustomer, false);
-                System.out.println("BOOKED");
             }
         }
-        
 
         // Setup the query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
@@ -220,12 +253,12 @@ public class NEATSystemTests {
         }
     } 
     
-    /// TEST 3, TEST 4 & TEST 5 ARE FOR DEMONSTRATING THE FUNCTIONALITY IN USE CASE 2
+    /// TEST 4, TEST 5 & TEST 6 ARE FOR DEMONSTRATING THE FUNCTIONALITY IN USE CASE 2
     /// Booking a Quote with/without delivery service and checking that the returned booking object matches
     /// Also testing that the Booking objects are captured in our system-level BookingController class
     
     @Test
-    @DisplayName("TEST 3: Creates a booking for a quote picked from an arbitrary returned store "
+    @DisplayName("TEST 4: Creates a booking for a quote picked from an arbitrary returned store "
             + "& validates booking against quote, no delivery")
     // Gathers quotes and then creates a unique booking for a customer's desired store
     // Test checks that the returned booking is the same as the quote selected
@@ -262,11 +295,11 @@ public class NEATSystemTests {
     }
     
     @Test
-    @DisplayName("TEST 4: Create booking from quote & checks that the Booking's delivery is scheduled"
+    @DisplayName("TEST 5: Create booking from quote & checks that the Booking's delivery is scheduled"
             + " using the DeliveryService")
     // Gathers quotes and then creates a unique booking for a customer's desired store
-    // Test checks that the returned booking is the same as the quote selected
-    // and also check the functionality of the delivery service
+    // Test checks that the delivery service correctly schedules a delivery for the starting date
+    // of the booking.
     void bookQuoteWDelivTest() {
         // Setup the query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
@@ -288,13 +321,16 @@ public class NEATSystemTests {
             }
         }
         
+        // Get the bookings that are scheduled for the delivery day
         MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
-        assertEquals(newBooking, deliveryService.getPickupsOn(desiredDates.getStart()));
+        Collection<Deliverable> bookingsToBeDelivered = deliveryService.getPickupsOn(desiredDates.getStart());
         
+        // Check that the newBooking just created is in the bookingsToBeDelivered
+        assertTrue(bookingsToBeDelivered.contains(newBooking));
     } 
     
- /*   @Test
-    @DisplayName("TEST 5: Creates 2 bookings and verifies that these are recorded in *that Provider's* BookingController")
+    @Test
+    @DisplayName("TEST 6: Creates 2 bookings and verifies that these are recorded in *that Provider's* BookingController")
     // Gathers quotes and then creates a unique booking for a customer's desired store *2
     // Test checks that the created bookings are present in the BookingController class
     void quoteBookingsCaptureTest() {
@@ -335,7 +371,5 @@ public class NEATSystemTests {
                 newBooking = quoteController.bookQuote(quote, testCustomer, false);
             }
         }
-        
-        
-    } */
+    }
 }
