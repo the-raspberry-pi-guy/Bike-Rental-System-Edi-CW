@@ -271,7 +271,7 @@ public class NEATSystemTests {
         DateRange desiredDates = new DateRange(LocalDate.of(2019, 12, 19), LocalDate.of(2019, 12, 25)); 
         
         Set<Quote> result = quoteController.getQuotes(desiredDates, scottishBikeProviders, desiredBikes,
-                new Location("EH9 ABC", "Tim Peake Hill, Edinburgh"));
+                new Location("EH9 ABC", "Tim Peake Hill, Edinburgh"), null, null);
         
         // Check that the result is just an empty set, as no providers can supply the number of bikes asked for
         assertEquals(new HashSet<Quote>(), result);
