@@ -94,18 +94,20 @@ public class QuoteController {
 	}
 
 	public Booking bookQuote(Quote chosenQuote, Customer customer, boolean requiresDelivery) {
-		Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), 
+		
+	    Booking booking = new Booking(chosenQuote.getBookingRange(), requiresDelivery, chosenQuote.getTotalPrice(), chosenQuote.getTotalDeposit(), 
 		        chosenQuote.getBikeList(), chosenQuote.getProvider(), customer);
-		chosenQuote.getProvider().getBookingList().add(booking);
+		
+	    chosenQuote.getProvider().getBookingList().add(booking);
 		
 		for (Bike bike:booking.getBikeList()) {
 		    bike.makeUnavailable(booking.getHireDates());
 		}
 		
-/*		if (requiresDelivery) {
+		if (requiresDelivery) {
 	          DeliveryServiceFactory.getDeliveryService().scheduleDelivery(booking, booking.getHireProvider().getContactDetails().getLocation(), 
 	                  booking.getCustomer().getCustomerDetails().getLocation(), booking.getHireDates().getStart());
-		} */
+		} 
 		
 		return booking;
 	}

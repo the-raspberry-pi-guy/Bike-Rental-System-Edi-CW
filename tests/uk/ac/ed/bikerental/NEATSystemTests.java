@@ -298,8 +298,8 @@ public class NEATSystemTests {
     @DisplayName("TEST 5: Create booking from quote & checks that the Booking's delivery is scheduled"
             + " using the DeliveryService")
     // Gathers quotes and then creates a unique booking for a customer's desired store
-    // Test checks that the returned booking is the same as the quote selected
-    // and also check the functionality of the delivery service
+    // Test checks that the delivery service correctly schedules a delivery for the starting date
+    // of the booking.
     void bookQuoteWDelivTest() {
         // Setup the query and add the bikes and desired quantities
         Map<BikeType, Integer> desiredBikes = new HashMap<>();
@@ -321,12 +321,15 @@ public class NEATSystemTests {
             }
         }
         
+        // Get the bookings that are scheduled for the delivery day
         MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
-        assertEquals(newBooking, deliveryService.getPickupsOn(desiredDates.getStart()));
+        Collection<Deliverable> bookingsToBeDelivered = deliveryService.getPickupsOn(desiredDates.getStart());
         
+        // Check that the newBooking just created is in the bookingsToBeDelivered
+        assertTrue(bookingsToBeDelivered.contains(newBooking));
     } 
     
- /*   @Test
+    @Test
     @DisplayName("TEST 6: Creates 2 bookings and verifies that these are recorded in *that Provider's* BookingController")
     // Gathers quotes and then creates a unique booking for a customer's desired store *2
     // Test checks that the created bookings are present in the BookingController class
@@ -368,7 +371,5 @@ public class NEATSystemTests {
                 newBooking = quoteController.bookQuote(quote, testCustomer, false);
             }
         }
-        
-        
-    } */
+    }
 }
