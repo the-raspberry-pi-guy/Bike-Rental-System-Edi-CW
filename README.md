@@ -6,4 +6,4 @@ Written in Java, this repo contains the final implementation, meeting our previo
 
 For more details of the brief of this coursework please refer to the brief directory where you can find the coursework instructions.
 
-Mark: A1 grade. Completed during Year 2, Semester 1 of BSc Computer Science programme at The University of Edinburgh, in Winter 2019.
+Mark: 100% (A1 grade). Completed during Year 2, Semester 1 of BSc Computer Science programme at The University of Edinburgh, in Winter 2019.
